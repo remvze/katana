@@ -1,14 +1,9 @@
 ---
 import Layout from '@/layouts/layout.astro';
 
-import { supabase } from '@/lib/supabase';
-
-const { count } = await supabase
-  .from('katana.urls')
-  .select('*', { count: 'exact' });
+import { ShortenForm } from '@/components/shorten-form';
 ---
 
 <Layout>
-  <h1>Hello World</h1>
-  <p>{count} URLs</p>
+  <ShortenForm client:load />
 </Layout>

@@ -1,0 +1,17 @@
+---
+import Layout from '@/layouts/layout.astro';
+
+import { getUrl } from '@/lib/url';
+
+const { slug } = Astro.params;
+
+const data = await getUrl(slug);
+
+if (data) {
+  return Astro.redirect(data.original_url);
+}
+---
+
+<Layout>
+  <h1>404</h1>
+</Layout>
