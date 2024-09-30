@@ -1,17 +1,19 @@
 ---
 import Layout from '@/layouts/layout.astro';
 
-import { getUrl } from '@/lib/url';
+import { EncryptedUrl } from '@/components/encrypted-url';
+
+import { getEncryptedUrl } from '@/lib/url';
 
 const { slug } = Astro.params;
 
-const data = await getUrl(slug);
+const data = await getEncryptedUrl(slug);
 
-if (data) {
-  return Astro.redirect(data.original_url);
+if (!data) {
+  return Astro.rewrite('/404');
 }
 ---
 
 <Layout>
-  <h1>404</h1>
+  <EncryptedUrl client:load encryptedUrl={data.encrypted_url} />
 </Layout>

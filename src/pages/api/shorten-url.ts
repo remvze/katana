@@ -6,7 +6,7 @@ export const POST: APIRoute = async ({ request }) => {
   if (request.headers.get('Content-Type') !== 'application/json')
     return new Response(null, { status: 400 });
 
-  const { token, url } = await request.json();
+  const { encryptedUrl, token } = await request.json();
 
   if (!token) {
     return new Response(
@@ -31,7 +31,7 @@ export const POST: APIRoute = async ({ request }) => {
   const verificationResult = await verificationResponse.json();
 
   if (verificationResult.success) {
-    const slug = await createUrl(url);
+    const slug = await createUrl(encryptedUrl);
 
     return new Response(JSON.stringify({ slug }), { status: 200 });
   } else {

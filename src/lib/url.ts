@@ -2,7 +2,7 @@ import { supabase } from './supabase';
 
 import { generateSecureSlug } from './crypto.server';
 
-export async function createUrl(original: string) {
+export async function createUrl(encryptedUrl: string) {
   let slugExists = true;
   let slug;
 
@@ -21,7 +21,7 @@ export async function createUrl(original: string) {
 
   await supabase.from('katana.urls').insert([
     {
-      original_url: original,
+      encrypted_url: encryptedUrl,
       slug,
     },
   ]);
@@ -29,10 +29,10 @@ export async function createUrl(original: string) {
   return slug;
 }
 
-export async function getUrl(slug: string) {
+export async function getEncryptedUrl(slug: string) {
   const { data } = await supabase
     .from('katana.urls')
-    .select('original_url')
+    .select('encrypted_url')
     .eq('slug', slug)
     .single();
 
