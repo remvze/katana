@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
 import Turnstile from 'react-turnstile';
 
+import { Container } from '../container';
+
 import { generateSecureKey, encrypt } from '@/lib/crypto';
 import { KEY_LENGTH } from '@/constants/url';
+
+import styles from './shorten-form.module.css';
+import { cn } from '@/helpers/styles';
 
 export function ShortenForm() {
   const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
@@ -57,34 +62,55 @@ export function ShortenForm() {
   };
 
   return (
-    <>
-      {!isLoading && !result && (
-        <form onSubmit={handleSubmit}>
-          <input
-            placeholder="Original URL"
-            type="url"
-            value={url}
-            onChange={e => setUrl(e.target.value)}
-          />
+    <Container>
+      {!result && (
+        <form
+          className={cn(styles.form, isLoading && styles.disabled)}
+          onSubmit={handleSubmit}
+        >
+          <div className={styles.field}>
+            <label htmlFor="url">Long URL</label>
+            <input
+              disabled={isLoading}
+              id="url"
+              placeholder="https://example.com/"
+              required
+              type="url"
+              value={url}
+              onChange={e => setUrl(e.target.value)}
+            />
+          </div>
 
-          <input
-            placeholder="Password (optional)"
-            type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-          />
+          <div className={styles.field}>
+            <label htmlFor="password">
+              Password <span>(optional)</span>
+            </label>
+            <input
+              disabled={isLoading}
+              id="password"
+              placeholder="••••••••"
+              type="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+            />
+          </div>
 
           {mountTurnstile && (
-            <Turnstile sitekey={siteKey} onVerify={token => setToken(token)} />
+            <Turnstile
+              className={styles.turnstile}
+              sitekey={siteKey}
+              size="flexible"
+              onVerify={token => setToken(token)}
+            />
           )}
 
-          <button type="submit">Shorten URL</button>
+          <button className={styles.button} disabled={isLoading} type="submit">
+            Shorten URL
+          </button>
         </form>
       )}
 
-      {isLoading && <p>Loading...</p>}
-
       {result && <p>{result}</p>}
-    </>
+    </Container>
   );
 }
