@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Turnstile from 'react-turnstile';
 
 import { generateSecureKey, encrypt } from '@/lib/crypto';
+import { KEY_LENGTH } from '@/constants/url';
 
 export function ShortenForm() {
   const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
@@ -22,7 +23,7 @@ export function ShortenForm() {
 
     setIsLoading(true);
 
-    const key = await generateSecureKey(16);
+    const key = await generateSecureKey(KEY_LENGTH);
     const encrypted = await encrypt(url, key);
 
     const response = await fetch('/api/shorten-url', {

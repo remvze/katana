@@ -1,13 +1,14 @@
 import { supabase } from './supabase';
 
 import { generateSecureSlug } from './crypto.server';
+import { SLUG_LENGTH } from '@/constants/url';
 
 export async function createUrl(encryptedUrl: string) {
   let slugExists = true;
   let slug;
 
   do {
-    slug = generateSecureSlug(10);
+    slug = generateSecureSlug(SLUG_LENGTH);
 
     const { data } = await supabase
       .from('katana.urls')
