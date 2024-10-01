@@ -4,6 +4,7 @@ import { Container } from './container';
 
 <Container>
   <section class="hero">
+    <img alt="Katana Logo" src="/logo.svg" />
     <h1>Katana</h1>
     <p>End-to-end encrypted URL shortener.</p>
   </section>
@@ -12,6 +13,12 @@ import { Container } from './container';
 <style>
   .hero {
     padding: 100px 0 40px;
+
+    & img {
+      display: block;
+      width: 24px;
+      margin-bottom: 16px;
+    }
 
     & h1 {
       font-family: var(--font-display);
