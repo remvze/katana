@@ -38,7 +38,7 @@
 @font-face {
   font-family: Fraunces;
   font-style: normal;
-  font-weight: 700;
-  src: url('/fonts/fraunces-v31-latin-700.woff2') format('woff2');
+  font-weight: 500;
+  src: url('/fonts/fraunces-v31-latin-500.woff2') format('woff2');
   font-display: swap;
 }

@@ -1,9 +1,10 @@
 ---
 import Layout from '@/layouts/layout.astro';
-
+import Hero from '@/components/hero.astro';
 import { ShortenForm } from '@/components/shorten-form';
 ---
 
 <Layout>
+  <Hero />
   <ShortenForm client:load />
 </Layout>
