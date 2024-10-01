@@ -7,7 +7,7 @@ import { getEncryptedUrl } from '@/lib/url';
 
 const { slug } = Astro.params;
 
-const data = await getEncryptedUrl(slug);
+const data = await getEncryptedUrl(slug!);
 
 if (!data) {
   return Astro.rewrite('/404');
@@ -15,5 +15,9 @@ if (!data) {
 ---
 
 <Layout>
-  <EncryptedUrl client:load encryptedUrl={data.encrypted_url} />
+  <EncryptedUrl
+    client:load
+    encryptedUrl={data.encrypted_url}
+    passwordProtected={data.password_protected}
+  />
 </Layout>
