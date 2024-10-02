@@ -31,9 +31,14 @@ export const POST: APIRoute = async ({ request }) => {
   const verificationResult = await verificationResponse.json();
 
   if (verificationResult.success) {
-    const slug = await createUrl(encryptedUrl, !!passwordProtected || false);
+    const { destructionKey, slug } = await createUrl(
+      encryptedUrl,
+      !!passwordProtected || false,
+    );
 
-    return new Response(JSON.stringify({ slug }), { status: 200 });
+    return new Response(JSON.stringify({ destructionKey, slug }), {
+      status: 200,
+    });
   } else {
     return new Response(JSON.stringify({ error: 'Verification failed.' }), {
       status: 400,

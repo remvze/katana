@@ -20,3 +20,9 @@ export function generateSecureSlug(length: number) {
 
   return slug;
 }
+
+export function generateSecureKey(bytes: number) {
+  const buffer = crypto.randomBytes(bytes);
+
+  return buffer.toString('hex');
+}

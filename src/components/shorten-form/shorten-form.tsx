@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import Turnstile from 'react-turnstile';
+import { FaCopy, FaCheck } from 'react-icons/fa6';
 
 import { Container } from '../container';
 
 import { generateSecureKey, encrypt } from '@/lib/crypto';
 import { KEY_LENGTH } from '@/constants/url';
+import { useCopy } from '@/hooks/use-copy';
 
 import styles from './shorten-form.module.css';
 import { cn } from '@/helpers/styles';
@@ -16,18 +18,19 @@ export function ShortenForm() {
   const [token, setToken] = useState('');
 
   useEffect(() => setMountTurnstile(true), []);
-  useEffect(() => console.log({ token }), [token]);
 
   const [url, setUrl] = useState('');
   const [password, setPassword] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState('');
+  const [destructionKey, setDestructionKey] = useState('');
+
+  const { copy: copyLink, copying: copyingLink } = useCopy();
+  const { copy: copyKey, copying: copyingKey } = useCopy();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    console.log({ token, url });
 
     if (!url || !token) return null;
 
@@ -58,7 +61,16 @@ export function ShortenForm() {
       throw new Error(data.error || 'Failed to shorten URL');
     }
 
+    setDestructionKey(data.destructionKey);
     setResult(`${data.slug}${password ? '' : `#${key}`}`);
+  };
+
+  const reset = () => {
+    setResult('');
+    setDestructionKey('');
+
+    setUrl('');
+    setPassword('');
   };
 
   return (
@@ -117,7 +129,46 @@ export function ShortenForm() {
         </form>
       )}
 
-      {result && <p>{result}</p>}
+      {!!result.length && (
+        <div className={styles.result}>
+          <div className={styles.field}>
+            <label htmlFor="shortUrl">Short URL</label>
+            <div className={styles.inputWrapper}>
+              <input
+                readOnly
+                type="text"
+                value={`https://${import.meta.env.PUBLIC_SITE_DOMAIN}/${result}`}
+              />
+              <button
+                onClick={() =>
+                  copyLink(
+                    `https://${import.meta.env.PUBLIC_SITE_DOMAIN}/${result}`,
+                  )
+                }
+              >
+                {copyingLink ? <FaCheck /> : <FaCopy />}
+              </button>
+            </div>
+          </div>
+
+          <div className={styles.field}>
+            <label htmlFor="shortUrl">Destruction Key</label>
+            <div className={styles.inputWrapper}>
+              <input readOnly type="text" value={destructionKey} />
+              <button onClick={() => copyKey(destructionKey)}>
+                {copyingKey ? <FaCheck /> : <FaCopy />}
+              </button>
+            </div>
+            <p>
+              <span>Notice:</span> Do NOT share this with anyone.
+            </p>
+          </div>
+
+          <button className={styles.button} onClick={reset}>
+            Back to Form
+          </button>
+        </div>
+      )}
     </Container>
   );
 }

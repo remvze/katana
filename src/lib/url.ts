@@ -1,7 +1,9 @@
+import { hash } from 'bcrypt';
+
 import { supabase } from './supabase';
 
-import { generateSecureSlug } from './crypto.server';
-import { SLUG_LENGTH } from '@/constants/url';
+import { generateSecureSlug, generateSecureKey } from './crypto.server';
+import { SLUG_LENGTH, DESTRUCTION_KEY_BYTES } from '@/constants/url';
 
 export async function createUrl(
   encryptedUrl: string,
@@ -23,15 +25,19 @@ export async function createUrl(
     else slugExists = false;
   } while (slugExists);
 
+  const destructionKey = generateSecureKey(DESTRUCTION_KEY_BYTES);
+  const destructionKeyHash = await hash(destructionKey, 12);
+
   await supabase.from('katana.urls').insert([
     {
+      destruction_key: destructionKeyHash,
       encrypted_url: encryptedUrl,
       password_protected: passwordProtected,
       slug,
     },
   ]);
 
-  return slug;
+  return { destructionKey: `${slug}:${destructionKey}`, slug };
 }
 
 export async function getEncryptedUrl(slug: string) {
