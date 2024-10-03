@@ -1,4 +1,5 @@
 export async function encrypt(text: string, password: string) {
+  const { crypto } = window;
   const encoder = new TextEncoder();
   const encodedText = encoder.encode(text);
   const encodedPassword = encoder.encode(password);
@@ -48,6 +49,7 @@ export async function encrypt(text: string, password: string) {
 }
 
 export async function decrypt(encodedData: string, password: string) {
+  const { crypto } = window;
   const data = JSON.parse(atob(encodedData));
   const encryptedArray = base64ToBuffer(data.encryptedData);
   const saltArray = base64ToBuffer(data.salt);
@@ -104,7 +106,7 @@ export async function generateSecureKey(length: number) {
   while (slug.length < length) {
     const randomBytes = new Uint8Array(1);
 
-    crypto.getRandomValues(randomBytes);
+    window.crypto.getRandomValues(randomBytes);
 
     const randomValue = randomBytes[0];
 
