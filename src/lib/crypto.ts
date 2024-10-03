@@ -1,12 +1,11 @@
 export async function encrypt(text: string, password: string) {
-  const { crypto } = window;
   const encoder = new TextEncoder();
   const encodedText = encoder.encode(text);
   const encodedPassword = encoder.encode(password);
-  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const salt = window.crypto.getRandomValues(new Uint8Array(16));
   const iterations = 150_000;
 
-  const keyMaterial = await crypto.subtle.importKey(
+  const keyMaterial = await window.crypto.subtle.importKey(
     'raw',
     encodedPassword,
     { name: 'PBKDF2' },
@@ -14,7 +13,7 @@ export async function encrypt(text: string, password: string) {
     ['deriveKey'],
   );
 
-  const key = await crypto.subtle.deriveKey(
+  const key = await window.crypto.subtle.deriveKey(
     {
       hash: 'SHA-256',
       iterations,
@@ -27,9 +26,9 @@ export async function encrypt(text: string, password: string) {
     ['encrypt'],
   );
 
-  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const iv = window.crypto.getRandomValues(new Uint8Array(12));
 
-  const encrypted = await crypto.subtle.encrypt(
+  const encrypted = await window.crypto.subtle.encrypt(
     {
       iv: iv,
       name: 'AES-GCM',
@@ -49,7 +48,6 @@ export async function encrypt(text: string, password: string) {
 }
 
 export async function decrypt(encodedData: string, password: string) {
-  const { crypto } = window;
   const data = JSON.parse(atob(encodedData));
   const encryptedArray = base64ToBuffer(data.encryptedData);
   const saltArray = base64ToBuffer(data.salt);
@@ -59,7 +57,7 @@ export async function decrypt(encodedData: string, password: string) {
   const encoder = new TextEncoder();
   const encodedPassword = encoder.encode(password);
 
-  const keyMaterial = await crypto.subtle.importKey(
+  const keyMaterial = await window.crypto.subtle.importKey(
     'raw',
     encodedPassword,
     { name: 'PBKDF2' },
@@ -67,7 +65,7 @@ export async function decrypt(encodedData: string, password: string) {
     ['deriveKey'],
   );
 
-  const key = await crypto.subtle.deriveKey(
+  const key = await window.crypto.subtle.deriveKey(
     {
       hash: 'SHA-256',
       iterations,
@@ -80,7 +78,7 @@ export async function decrypt(encodedData: string, password: string) {
     ['decrypt'],
   );
 
-  const decrypted = await crypto.subtle.decrypt(
+  const decrypted = await window.crypto.subtle.decrypt(
     {
       iv: ivArray,
       name: 'AES-GCM',
