@@ -1,48 +1,54 @@
 import { useState, useEffect } from 'react';
 
-import { decrypt } from '@/lib/crypto';
+import { decrypt, createIdentifier } from '@/lib/crypto';
 
-interface EncryptedUrlProps {
-  encryptedUrl: string;
-  passwordProtected: boolean;
-}
-
-export function EncryptedUrl({
-  encryptedUrl,
-  passwordProtected,
-}: EncryptedUrlProps) {
+export function EncryptedUrl() {
   const [error, setError] = useState('');
   const [result, setResult] = useState('');
+  const [encrypted, setEncrypted] = useState('');
+  const [passwordProtected, setPasswordProtected] = useState(false);
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    if (!passwordProtected) {
-      const hash = location.hash.split('#')[1];
+    const hash = location.hash.split('#')[1];
 
-      if (!hash) return setError('No decryption key');
+    if (!hash) return setError('No decryption key');
 
-      const decryptUrl = async () => {
-        try {
-          const decryptedUrl = await decrypt(encryptedUrl, hash);
+    const decryptUrl = async () => {
+      const identifier = await createIdentifier(hash);
 
-          setResult(decryptedUrl);
-        } catch (err) {
-          setError('Wrong key');
-        }
-      };
+      const response = await fetch(`/api/url/${identifier}`, {
+        method: 'GET',
+      });
 
-      decryptUrl();
-    }
-  }, [encryptedUrl, passwordProtected]);
+      if (!response.ok) window.location.href = '/404';
+
+      const data = await response.json();
+      const { encryptedUrl, passwordProtected } = data;
+
+      const decrypted = await decrypt(encryptedUrl, hash);
+
+      if (passwordProtected) {
+        setEncrypted(decrypted);
+        setPasswordProtected(true);
+      } else {
+        setResult(decrypted);
+      }
+    };
+
+    decryptUrl();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      const decryptedUrl = await decrypt(encryptedUrl, password);
+    if (!password) return;
 
-      setResult(decryptedUrl);
-    } catch (err) {
+    try {
+      const decrypted = await decrypt(encrypted, password);
+
+      setResult(decrypted);
+    } catch (error) {
       setError('Wrong password');
     }
   };
@@ -53,7 +59,6 @@ export function EncryptedUrl({
     return (
       <form onSubmit={handleSubmit}>
         <input
-          placeholder="Password"
           type="password"
           value={password}
           onChange={e => setPassword(e.target.value)}
@@ -61,5 +66,5 @@ export function EncryptedUrl({
       </form>
     );
 
-  return <h1>{encryptedUrl}</h1>;
+  return <h1>Hello World</h1>;
 }

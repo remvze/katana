@@ -1,8 +1,68 @@
+function bufferToHex(buffer: ArrayBuffer) {
+  return Array.from(new Uint8Array(buffer))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+async function sha256(str: string) {
+  const buffer = new TextEncoder().encode(str);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+  const hashArray = new Uint8Array(hashBuffer);
+
+  return hashArray;
+}
+
+/**
+ * Used to create an identifier for the server.
+ */
+export async function createIdentifier(key: string) {
+  const keyData = new TextEncoder().encode(key);
+
+  const baseKey = await window.crypto.subtle.importKey(
+    'raw',
+    keyData,
+    'PBKDF2',
+    false,
+    ['deriveBits'],
+  );
+
+  const contextString = 'IDENTIFIER';
+  const contextData = new TextEncoder().encode(contextString);
+  const salt = await sha256(key);
+  const combinedSalt = new Uint8Array([...salt, ...contextData]);
+
+  const iterations = 150_000;
+  const derivedBits = await window.crypto.subtle.deriveBits(
+    {
+      hash: 'SHA-256',
+      iterations,
+      name: 'PBKDF2',
+      salt: combinedSalt,
+    },
+    baseKey,
+    256,
+  );
+
+  const identifierHash = await window.crypto.subtle.digest(
+    'SHA-256',
+    derivedBits,
+  );
+
+  const identifierHex = bufferToHex(identifierHash);
+
+  return identifierHex;
+}
+
 export async function encrypt(text: string, password: string) {
   const encoder = new TextEncoder();
   const encodedText = encoder.encode(text);
   const encodedPassword = encoder.encode(password);
+
   const salt = window.crypto.getRandomValues(new Uint8Array(16));
+  const contextString = 'ENCRYPTION';
+  const contextData = new TextEncoder().encode(contextString);
+  const combinedSalt = new Uint8Array([...salt, ...contextData]);
+
   const iterations = 150_000;
 
   const keyMaterial = await window.crypto.subtle.importKey(
@@ -18,7 +78,7 @@ export async function encrypt(text: string, password: string) {
       hash: 'SHA-256',
       iterations,
       name: 'PBKDF2',
-      salt: salt,
+      salt: combinedSalt,
     },
     keyMaterial,
     { length: 256, name: 'AES-GCM' },
@@ -42,7 +102,7 @@ export async function encrypt(text: string, password: string) {
       encryptedData: bufferToBase64(new Uint8Array(encrypted)),
       iterations,
       iv: bufferToBase64(iv),
-      salt: bufferToBase64(salt),
+      salt: bufferToBase64(combinedSalt),
     }),
   );
 }

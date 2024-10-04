@@ -4,7 +4,7 @@ import { FaCopy, FaCheck } from 'react-icons/fa6';
 
 import { Container } from '../container';
 
-import { generateSecureKey, encrypt } from '@/lib/crypto';
+import { generateSecureKey, encrypt, createIdentifier } from '@/lib/crypto';
 import { KEY_LENGTH } from '@/constants/url';
 import { useCopy } from '@/hooks/use-copy';
 
@@ -36,16 +36,20 @@ export function ShortenForm() {
 
     setIsLoading(true);
 
-    let key;
+    const key = await generateSecureKey(KEY_LENGTH);
+    const identifier = await createIdentifier(key);
+    let encrypted = url;
 
-    if (password.length > 0) key = password;
-    else key = await generateSecureKey(KEY_LENGTH);
+    if (password) {
+      encrypted = await encrypt(encrypted, password);
+    }
 
-    const encrypted = await encrypt(url, key);
+    encrypted = await encrypt(encrypted, key);
 
     const response = await fetch('/api/shorten-url', {
       body: JSON.stringify({
         encryptedUrl: encrypted,
+        identifier,
         passwordProtected: !!password,
         token,
       }),
@@ -62,7 +66,7 @@ export function ShortenForm() {
     }
 
     setDestructionKey(data.destructionKey);
-    setResult(`${data.slug}${password ? '' : `#${key}`}`);
+    setResult(`${key}`);
   };
 
   const reset = () => {
@@ -137,12 +141,12 @@ export function ShortenForm() {
               <input
                 readOnly
                 type="text"
-                value={`https://${import.meta.env.PUBLIC_SITE_DOMAIN}/${result}`}
+                value={`https://${import.meta.env.PUBLIC_SITE_DOMAIN}/go#${result}`}
               />
               <button
                 onClick={() =>
                   copyLink(
-                    `https://${import.meta.env.PUBLIC_SITE_DOMAIN}/${result}`,
+                    `https://${import.meta.env.PUBLIC_SITE_DOMAIN}/go#${result}`,
                   )
                 }
               >

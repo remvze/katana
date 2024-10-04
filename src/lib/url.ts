@@ -2,28 +2,21 @@ import { hash } from 'bcrypt';
 
 import { supabase } from './supabase';
 
-import { generateSecureSlug, generateSecureKey } from './crypto.server';
-import { SLUG_LENGTH, DESTRUCTION_KEY_BYTES } from '@/constants/url';
+import { generateSecureKey } from './crypto.server';
+import { DESTRUCTION_KEY_BYTES } from '@/constants/url';
 
 export async function createUrl(
   encryptedUrl: string,
+  identifier: string,
   passwordProtected: boolean = false,
 ) {
-  let slugExists = true;
-  let slug;
+  const { data } = await supabase
+    .from('katana.urls')
+    .select('id')
+    .eq('identifier', identifier)
+    .limit(1);
 
-  do {
-    slug = generateSecureSlug(SLUG_LENGTH);
-
-    const { data } = await supabase
-      .from('katana.urls')
-      .select('id')
-      .eq('slug', slug)
-      .limit(1);
-
-    if (data?.length) slugExists = true;
-    else slugExists = false;
-  } while (slugExists);
+  if (data?.length) throw new Error('Identifier exists');
 
   const destructionKey = generateSecureKey(DESTRUCTION_KEY_BYTES);
   const destructionKeyHash = await hash(destructionKey, 12);
@@ -32,19 +25,19 @@ export async function createUrl(
     {
       destruction_key: destructionKeyHash,
       encrypted_url: encryptedUrl,
+      identifier,
       password_protected: passwordProtected,
-      slug,
     },
   ]);
 
-  return { destructionKey: `${slug}:${destructionKey}`, slug };
+  return { destructionKey: `${identifier}:${destructionKey}` };
 }
 
-export async function getEncryptedUrl(slug: string) {
+export async function getEncryptedUrl(identifier: string) {
   const { data } = await supabase
     .from('katana.urls')
     .select('encrypted_url, password_protected')
-    .eq('slug', slug)
+    .eq('identifier', identifier)
     .single();
 
   return data;
