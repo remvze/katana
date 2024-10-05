@@ -50,7 +50,7 @@ export function ShortenForm() {
       body: JSON.stringify({
         encryptedUrl: encrypted,
         identifier,
-        passwordProtected: !!password,
+        isPasswordProtected: !!password,
         token,
       }),
       headers: { 'Content-Type': 'application/json' },

@@ -6,7 +6,7 @@ export function EncryptedUrl() {
   const [error, setError] = useState('');
   const [result, setResult] = useState('');
   const [encrypted, setEncrypted] = useState('');
-  const [passwordProtected, setPasswordProtected] = useState(false);
+  const [isPasswordProtected, setIsPasswordProtected] = useState(false);
   const [password, setPassword] = useState('');
 
   useEffect(() => {
@@ -24,13 +24,13 @@ export function EncryptedUrl() {
       if (!response.ok) window.location.href = '/404';
 
       const data = await response.json();
-      const { encryptedUrl, passwordProtected } = data;
+      const { encryptedUrl, isPasswordProtected } = data;
 
       const decrypted = await decrypt(encryptedUrl, hash);
 
-      if (passwordProtected) {
+      if (isPasswordProtected) {
         setEncrypted(decrypted);
-        setPasswordProtected(true);
+        setIsPasswordProtected(true);
       } else {
         setResult(decrypted);
       }
@@ -55,7 +55,7 @@ export function EncryptedUrl() {
 
   if (error) return <p>{error}</p>;
   if (result) return <p>{result}</p>;
-  if (passwordProtected)
+  if (isPasswordProtected)
     return (
       <form onSubmit={handleSubmit}>
         <input

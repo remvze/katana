@@ -8,7 +8,7 @@ import { DESTRUCTION_KEY_BYTES } from '@/constants/url';
 export async function createUrl(
   encryptedUrl: string,
   identifier: string,
-  passwordProtected: boolean = false,
+  isPasswordProtected: boolean = false,
 ) {
   const hashedIdentifier = await hashIdentifier(identifier);
 
@@ -30,7 +30,7 @@ export async function createUrl(
         destruction_key: destructionKeyHash,
         encrypted_url: encryptedUrl,
         hashed_identifier: hashedIdentifier,
-        password_protected: passwordProtected,
+        is_password_protected: isPasswordProtected,
       },
     ])
     .select('id')
@@ -44,7 +44,7 @@ export async function getEncryptedUrl(identifier: string) {
 
   const { data } = await supabase
     .from('katana.urls')
-    .select('encrypted_url, password_protected')
+    .select('encrypted_url, is_password_protected')
     .eq('hashed_identifier', hashedIdentifier)
     .single();
 

@@ -11,7 +11,7 @@ export const GET: APIRoute = async ({ params }) => {
     return new Response(
       JSON.stringify({
         encryptedUrl: data.encrypted_url,
-        passwordProtected: data.password_protected,
+        isPasswordProtected: data.is_password_protected,
       }),
       {
         status: 200,

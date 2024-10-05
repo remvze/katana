@@ -6,7 +6,7 @@ export const POST: APIRoute = async ({ request }) => {
   if (request.headers.get('Content-Type') !== 'application/json')
     return new Response(null, { status: 400 });
 
-  const { encryptedUrl, identifier, passwordProtected, token } =
+  const { encryptedUrl, identifier, isPasswordProtected, token } =
     await request.json();
 
   if (!token) {
@@ -35,7 +35,7 @@ export const POST: APIRoute = async ({ request }) => {
     const { destructionKey } = await createUrl(
       encryptedUrl,
       identifier,
-      !!passwordProtected || false,
+      !!isPasswordProtected || false,
     );
 
     return new Response(JSON.stringify({ destructionKey }), {
