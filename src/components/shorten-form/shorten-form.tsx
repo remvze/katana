@@ -14,7 +14,7 @@ import { useCopy } from '@/hooks/use-copy';
 
 import styles from './shorten-form.module.css';
 import { cn } from '@/helpers/styles';
-import { createUrl } from '@/lib/api/url';
+import { createUrl } from '@/api/url';
 
 export function ShortenForm() {
   const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
