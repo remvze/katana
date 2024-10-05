@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { createUrl, getUrl } from '@/services/url';
 import { errorResponse, successResponse } from '@/lib/response';
 import { validator } from '@/middlewares/validator';
+import { verifyToken } from '@/lib/turnstile';
 
 const app = new Hono();
 
@@ -15,33 +16,12 @@ const newSchema = z.object({
 });
 
 app.post('/new', validator('json', newSchema), async c => {
-  if (c.req.header('Content-Type') !== 'application/json') {
-    return c.json(errorResponse('Invalid content type'), 400);
-  }
-
   const { encryptedUrl, identifier, isPasswordProtected, token } =
     await c.req.json();
 
-  if (!token) {
-    return c.json(errorResponse('No turnstile token found.'), 400);
-  }
+  const tokenIsValid = await verifyToken(token);
 
-  const verificationUrl =
-    'https://challenges.cloudflare.com/turnstile/v0/siteverify';
-
-  const body = new URLSearchParams();
-
-  body.append('secret', import.meta.env.TURNSTILE_SECRET_KEY);
-  body.append('response', token);
-
-  const verificationResponse = await fetch(verificationUrl, {
-    body,
-    method: 'POST',
-  });
-
-  const verificationResult = await verificationResponse.json();
-
-  if (verificationResult.success) {
+  if (tokenIsValid) {
     const { destructionKey } = await createUrl(
       encryptedUrl,
       identifier,
