@@ -21,3 +21,16 @@ export async function createUrl(
     method: 'POST',
   });
 }
+
+interface GetUrlResponse {
+  encryptedUrl: string;
+  isPasswordProtected: boolean;
+}
+
+export async function getUrl(
+  identifier: string,
+): Promise<APIResponse<GetUrlResponse>> {
+  return apiClient<GetUrlResponse>(`/api/urls/${identifier}`, {
+    headers: { 'Content-Type': 'application/json' },
+  });
+}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { decrypt, createIdentifier } from '@/lib/crypto.client';
+import { getUrl } from '@/api/url';
 
 export function EncryptedUrl() {
   const [error, setError] = useState('');
@@ -17,14 +18,14 @@ export function EncryptedUrl() {
     const decryptUrl = async () => {
       const identifier = await createIdentifier(hash);
 
-      const response = await fetch(`/api/urls/${identifier}`, {
-        method: 'GET',
-      });
+      const response = await getUrl(identifier);
 
-      if (!response.ok) window.location.href = '/404';
+      if (!response.success) {
+        window.location.href = '/404';
+        return;
+      }
 
-      const data = await response.json();
-      const { encryptedUrl, isPasswordProtected } = data.data;
+      const { encryptedUrl, isPasswordProtected } = response.data;
 
       const decrypted = await decrypt(encryptedUrl, hash);
 
