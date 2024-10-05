@@ -1,11 +1,20 @@
 import { Hono } from 'hono';
+import { z } from 'zod';
 
 import { createUrl, getUrl } from '@/services/url';
 import { errorResponse, successResponse } from '@/lib/response';
+import { validator } from '@/middlewares/validator';
 
 const app = new Hono();
 
-app.post('/new', async c => {
+const newSchema = z.object({
+  encruptedUrl: z.string(),
+  identifier: z.string(),
+  isPasswordProtected: z.boolean(),
+  token: z.string(),
+});
+
+app.post('/new', validator('json', newSchema), async c => {
   if (c.req.header('Content-Type') !== 'application/json') {
     return c.json(errorResponse('Invalid content type'), 400);
   }
