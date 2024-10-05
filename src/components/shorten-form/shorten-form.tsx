@@ -139,12 +139,12 @@ export function ShortenForm() {
               <input
                 readOnly
                 type="text"
-                value={`https://${import.meta.env.PUBLIC_SITE_DOMAIN}/go#${result}`}
+                value={`${import.meta.env.PUBLIC_UNSHORTENER_LINK}#${result}`}
               />
               <button
                 onClick={() =>
                   copyLink(
-                    `https://${import.meta.env.PUBLIC_SITE_DOMAIN}/go#${result}`,
+                    `${import.meta.env.PUBLIC_UNSHORTENER_LINK}#${result}`,
                   )
                 }
               >
