@@ -1,11 +1,11 @@
 import type { APIRoute } from 'astro';
 
-import { getEncryptedUrl } from '@/lib/url';
+import { getUrl } from '@/services/url';
 
 export const GET: APIRoute = async ({ params }) => {
   const { identifier } = params;
 
-  const data = await getEncryptedUrl(identifier!);
+  const data = await getUrl(identifier!);
 
   if (data) {
     return new Response(

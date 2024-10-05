@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 
-import { createUrl } from '@/lib/url';
+import { createUrl } from '@/services/url';
 
 export const POST: APIRoute = async ({ request }) => {
   if (request.headers.get('Content-Type') !== 'application/json')

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { decrypt, createIdentifier } from '@/lib/crypto';
+import { decrypt, createIdentifier } from '@/lib/crypto.client';
 
 export function EncryptedUrl() {
   const [error, setError] = useState('');

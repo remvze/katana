@@ -4,12 +4,17 @@ import { FaCopy, FaCheck } from 'react-icons/fa6';
 
 import { Container } from '../container';
 
-import { generateSecureKey, encrypt, createIdentifier } from '@/lib/crypto';
+import {
+  generateSecureKey,
+  encrypt,
+  createIdentifier,
+} from '@/lib/crypto.client';
 import { KEY_LENGTH } from '@/constants/url';
 import { useCopy } from '@/hooks/use-copy';
 
 import styles from './shorten-form.module.css';
 import { cn } from '@/helpers/styles';
+import { createUrl } from '@/lib/api/url';
 
 export function ShortenForm() {
   const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
@@ -46,26 +51,16 @@ export function ShortenForm() {
 
     encrypted = await encrypt(encrypted, key);
 
-    const response = await fetch('/api/shorten-url', {
-      body: JSON.stringify({
-        encryptedUrl: encrypted,
-        identifier,
-        isPasswordProtected: !!password,
-        token,
-      }),
-      headers: { 'Content-Type': 'application/json' },
-      method: 'POST',
+    const response = await createUrl({
+      encryptedUrl: encrypted,
+      identifier,
+      isPasswordProtected: !!password,
+      token,
     });
-
-    const data = await response.json();
 
     setIsLoading(false);
 
-    if (!response.ok) {
-      throw new Error(data.error || 'Failed to shorten URL');
-    }
-
-    setDestructionKey(data.destructionKey);
+    setDestructionKey(response.destructionKey);
     setResult(`${key}`);
   };
 

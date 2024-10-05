@@ -1,8 +1,8 @@
 import { hash } from 'bcrypt';
 
-import { supabase } from './supabase';
+import { supabase } from '@/lib/supabase';
 
-import { generateSecureKey, hashIdentifier } from './crypto.server';
+import { generateSecureKey, hashIdentifier } from '@/lib/crypto.server';
 import { DESTRUCTION_KEY_BYTES } from '@/constants/url';
 
 export async function createUrl(
@@ -39,7 +39,7 @@ export async function createUrl(
   return { destructionKey: `${res?.id}:${destructionKey}` };
 }
 
-export async function getEncryptedUrl(identifier: string) {
+export async function getUrl(identifier: string) {
   const hashedIdentifier = await hashIdentifier(identifier);
 
   const { data } = await supabase
