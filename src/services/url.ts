@@ -1,6 +1,6 @@
 import { hash } from 'bcrypt';
 
-import { supabase } from '@/lib/supabase';
+import { urlRepository } from '@/repositories/url';
 
 import { generateSecureKey, hashIdentifier } from '@/lib/crypto.server';
 import { DESTRUCTION_KEY_BYTES } from '@/constants/url';
@@ -12,41 +12,27 @@ export async function createUrl(
 ) {
   const hashedIdentifier = await hashIdentifier(identifier);
 
-  const { data } = await supabase
-    .from('katana.urls')
-    .select('id')
-    .eq('hashed_identifier', identifier)
-    .limit(1);
+  const shortUrl = await urlRepository.getUrl(hashedIdentifier);
 
-  if (data?.length) throw new Error('Identifier exists');
+  if (shortUrl) throw new Error('Identifier exists');
 
   const destructionKey = generateSecureKey(DESTRUCTION_KEY_BYTES);
   const destructionKeyHash = await hash(destructionKey, 12);
 
-  const { data: res } = await supabase
-    .from('katana.urls')
-    .insert([
-      {
-        destruction_key: destructionKeyHash,
-        encrypted_url: encryptedUrl,
-        hashed_identifier: hashedIdentifier,
-        is_password_protected: isPasswordProtected,
-      },
-    ])
-    .select('id')
-    .single();
+  const url = await urlRepository.createUrl({
+    destruction_key: destructionKeyHash,
+    encrypted_url: encryptedUrl,
+    hashed_identifier: hashedIdentifier,
+    is_password_protected: isPasswordProtected,
+  });
 
-  return { destructionKey: `${res?.id}:${destructionKey}` };
+  return { destructionKey: `${url?.id}:${destructionKey}` };
 }
 
 export async function getUrl(identifier: string) {
   const hashedIdentifier = await hashIdentifier(identifier);
 
-  const { data } = await supabase
-    .from('katana.urls')
-    .select('encrypted_url, is_password_protected')
-    .eq('hashed_identifier', hashedIdentifier)
-    .single();
+  const data = await urlRepository.getUrl(hashedIdentifier);
 
   return data;
 }
