@@ -23,16 +23,20 @@ export async function createUrl(
   const destructionKey = generateSecureKey(DESTRUCTION_KEY_BYTES);
   const destructionKeyHash = await hash(destructionKey, 12);
 
-  await supabase.from('katana.urls').insert([
-    {
-      destruction_key: destructionKeyHash,
-      encrypted_url: encryptedUrl,
-      hashed_identifier: hashedIdentifier,
-      password_protected: passwordProtected,
-    },
-  ]);
+  const { data: res } = await supabase
+    .from('katana.urls')
+    .insert([
+      {
+        destruction_key: destructionKeyHash,
+        encrypted_url: encryptedUrl,
+        hashed_identifier: hashedIdentifier,
+        password_protected: passwordProtected,
+      },
+    ])
+    .select('id')
+    .single();
 
-  return { destructionKey: `${identifier}:${destructionKey}` };
+  return { destructionKey: `${res?.id}:${destructionKey}` };
 }
 
 export async function getEncryptedUrl(identifier: string) {
