@@ -8,7 +8,7 @@ import { validator } from '@/middlewares/validator';
 const app = new Hono();
 
 const newSchema = z.object({
-  encruptedUrl: z.string(),
+  encryptedUrl: z.string(),
   identifier: z.string(),
   isPasswordProtected: z.boolean(),
   token: z.string(),
