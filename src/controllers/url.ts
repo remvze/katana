@@ -42,6 +42,7 @@ app.get('/:identifier', async c => {
   if (data) {
     return c.json(
       successResponse({
+        clicks: data.clicks,
         encryptedUrl: data.encrypted_url,
         isPasswordProtected: data.is_password_protected,
       }),

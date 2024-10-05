@@ -26,6 +26,20 @@ class UrlRepository {
 
     return data[0] || null;
   }
+
+  async updateUrl(
+    id: string,
+    updatedUrl: Partial<Omit<Url, 'id' | 'created_at'>>,
+  ) {
+    const { data, error } = await supabase
+      .from(this.table)
+      .update(updatedUrl)
+      .eq('id', id);
+
+    if (error) throw error;
+
+    return data;
+  }
 }
 
 export const urlRepository = new UrlRepository();

@@ -9,6 +9,7 @@ export function EncryptedUrl() {
   const [encrypted, setEncrypted] = useState('');
   const [isPasswordProtected, setIsPasswordProtected] = useState(false);
   const [password, setPassword] = useState('');
+  const [clicks, setClicks] = useState(0);
 
   useEffect(() => {
     const hash = location.hash.split('#')[1];
@@ -25,7 +26,9 @@ export function EncryptedUrl() {
         return;
       }
 
-      const { encryptedUrl, isPasswordProtected } = response.data;
+      const { clicks, encryptedUrl, isPasswordProtected } = response.data;
+
+      setClicks(clicks);
 
       const decrypted = await decrypt(encryptedUrl, hash);
 
@@ -55,7 +58,14 @@ export function EncryptedUrl() {
   };
 
   if (error) return <p>{error}</p>;
-  if (result) return <p>{result}</p>;
+  if (result)
+    return (
+      <p>
+        {result}
+        <br />
+        {clicks} clicks
+      </p>
+    );
   if (isPasswordProtected)
     return (
       <form onSubmit={handleSubmit}>

@@ -1,4 +1,5 @@
 export interface Url {
+  clicks: number;
   created_at: number;
   destruction_key: string;
   encrypted_url: string;

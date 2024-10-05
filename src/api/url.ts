@@ -23,6 +23,7 @@ export async function createUrl(
 }
 
 interface GetUrlResponse {
+  clicks: number;
   encryptedUrl: string;
   isPasswordProtected: boolean;
 }

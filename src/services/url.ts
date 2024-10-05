@@ -34,5 +34,8 @@ export async function getUrl(identifier: string) {
 
   const data = await urlRepository.getUrl(hashedIdentifier);
 
-  return data;
+  const { clicks, id } = data;
+  await urlRepository.updateUrl(id, { clicks: clicks + 1 });
+
+  return { ...data, clicks: clicks + 1 };
 }
