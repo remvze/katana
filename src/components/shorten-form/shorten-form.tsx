@@ -60,8 +60,11 @@ export function ShortenForm() {
 
     setIsLoading(false);
 
-    setDestructionKey(response.destructionKey);
-    setResult(`${key}`);
+    if (response.success) {
+      console.log({ response });
+      setDestructionKey(response.data.destructionKey);
+      setResult(`${key}`);
+    }
   };
 
   const reset = () => {

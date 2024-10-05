@@ -24,7 +24,7 @@ export function EncryptedUrl() {
       if (!response.ok) window.location.href = '/404';
 
       const data = await response.json();
-      const { encryptedUrl, isPasswordProtected } = data;
+      const { encryptedUrl, isPasswordProtected } = data.data;
 
       const decrypted = await decrypt(encryptedUrl, hash);
 

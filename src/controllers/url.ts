@@ -1,23 +1,20 @@
 import { Hono } from 'hono';
 
 import { createUrl, getUrl } from '@/services/url';
+import { errorResponse, successResponse } from '@/lib/response';
 
 const app = new Hono();
 
 app.post('/new', async c => {
-  if (c.req.header('Content-Type') !== 'application/json')
-    return c.json(
-      {
-        error: 'Invalid content type',
-      },
-      400,
-    );
+  if (c.req.header('Content-Type') !== 'application/json') {
+    return c.json(errorResponse('Invalid content type'), 400);
+  }
 
   const { encryptedUrl, identifier, isPasswordProtected, token } =
     await c.req.json();
 
   if (!token) {
-    return c.json({ error: 'No turnstile token found.' }, 400);
+    return c.json(errorResponse('No turnstile token found.'), 400);
   }
 
   const verificationUrl =
@@ -42,9 +39,9 @@ app.post('/new', async c => {
       !!isPasswordProtected || false,
     );
 
-    return c.json({ destructionKey }, 200);
+    return c.json(successResponse({ destructionKey }), 200);
   } else {
-    return c.json({ error: 'Verification failed.' }, 400);
+    return c.json(errorResponse('Verification failed.'), 400);
   }
 });
 
@@ -55,15 +52,15 @@ app.get('/:identifier', async c => {
 
   if (data) {
     return c.json(
-      {
+      successResponse({
         encryptedUrl: data.encrypted_url,
         isPasswordProtected: data.is_password_protected,
-      },
+      }),
       200,
     );
   }
 
-  return c.json({ error: 'Not found' }, 404);
+  return c.json(errorResponse('Not found'), 404);
 });
 
 export default app;
