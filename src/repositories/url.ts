@@ -1,14 +1,5 @@
 import { supabase } from '@/lib/supabase';
-
-interface Url {
-  created_at: number;
-  destruction_key: string;
-  encrypted_url: string;
-  hashed_identifier: string;
-  id: string;
-  is_deleted: boolean;
-  is_password_protected: boolean;
-}
+import type { Url } from '@/types/url';
 
 class UrlRepository {
   private table = 'katana.urls';
