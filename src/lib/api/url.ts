@@ -11,7 +11,7 @@ interface CreateUrlResponse {
 
 export async function createUrl(newUrl: NewUrl): Promise<CreateUrlResponse> {
   try {
-    const response = await fetch('/api/shorten-url', {
+    const response = await fetch('/api/urls/new', {
       body: JSON.stringify(newUrl),
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',

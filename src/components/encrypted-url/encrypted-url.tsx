@@ -17,7 +17,7 @@ export function EncryptedUrl() {
     const decryptUrl = async () => {
       const identifier = await createIdentifier(hash);
 
-      const response = await fetch(`/api/url/${identifier}`, {
+      const response = await fetch(`/api/urls/${identifier}`, {
         method: 'GET',
       });
 
