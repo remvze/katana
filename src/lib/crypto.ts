@@ -12,9 +12,6 @@ async function sha256(str: string) {
   return hashArray;
 }
 
-/**
- * Used to create an identifier for the server.
- */
 export async function createIdentifier(key: string) {
   const keyData = new TextEncoder().encode(key);
 
@@ -26,10 +23,7 @@ export async function createIdentifier(key: string) {
     ['deriveBits'],
   );
 
-  const contextString = 'IDENTIFIER';
-  const contextData = new TextEncoder().encode(contextString);
   const salt = await sha256(key);
-  const combinedSalt = new Uint8Array([...salt, ...contextData]);
 
   const iterations = 150_000;
   const derivedBits = await window.crypto.subtle.deriveBits(
@@ -37,7 +31,7 @@ export async function createIdentifier(key: string) {
       hash: 'SHA-256',
       iterations,
       name: 'PBKDF2',
-      salt: combinedSalt,
+      salt,
     },
     baseKey,
     256,
@@ -59,9 +53,6 @@ export async function encrypt(text: string, password: string) {
   const encodedPassword = encoder.encode(password);
 
   const salt = window.crypto.getRandomValues(new Uint8Array(16));
-  const contextString = 'ENCRYPTION';
-  const contextData = new TextEncoder().encode(contextString);
-  const combinedSalt = new Uint8Array([...salt, ...contextData]);
 
   const iterations = 150_000;
 
@@ -78,7 +69,7 @@ export async function encrypt(text: string, password: string) {
       hash: 'SHA-256',
       iterations,
       name: 'PBKDF2',
-      salt: combinedSalt,
+      salt,
     },
     keyMaterial,
     { length: 256, name: 'AES-GCM' },
@@ -102,7 +93,7 @@ export async function encrypt(text: string, password: string) {
       encryptedData: bufferToBase64(new Uint8Array(encrypted)),
       iterations,
       iv: bufferToBase64(iv),
-      salt: bufferToBase64(combinedSalt),
+      salt: bufferToBase64(salt),
     }),
   );
 }

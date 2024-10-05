@@ -2,7 +2,7 @@ import { hash } from 'bcrypt';
 
 import { supabase } from './supabase';
 
-import { generateSecureKey } from './crypto.server';
+import { generateSecureKey, hashIdentifier } from './crypto.server';
 import { DESTRUCTION_KEY_BYTES } from '@/constants/url';
 
 export async function createUrl(
@@ -10,10 +10,12 @@ export async function createUrl(
   identifier: string,
   passwordProtected: boolean = false,
 ) {
+  const hashedIdentifier = await hashIdentifier(identifier);
+
   const { data } = await supabase
     .from('katana.urls')
     .select('id')
-    .eq('identifier', identifier)
+    .eq('hashed_identifier', identifier)
     .limit(1);
 
   if (data?.length) throw new Error('Identifier exists');
@@ -25,7 +27,7 @@ export async function createUrl(
     {
       destruction_key: destructionKeyHash,
       encrypted_url: encryptedUrl,
-      identifier,
+      hashed_identifier: hashedIdentifier,
       password_protected: passwordProtected,
     },
   ]);
@@ -34,10 +36,12 @@ export async function createUrl(
 }
 
 export async function getEncryptedUrl(identifier: string) {
+  const hashedIdentifier = await hashIdentifier(identifier);
+
   const { data } = await supabase
     .from('katana.urls')
     .select('encrypted_url, password_protected')
-    .eq('identifier', identifier)
+    .eq('hashed_identifier', hashedIdentifier)
     .single();
 
   return data;
