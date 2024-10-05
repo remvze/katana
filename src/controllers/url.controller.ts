@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { z } from 'zod';
 
-import { createUrl, getUrl } from '@/services/url';
+import { createUrl, getUrl } from '@/services/url.service';
 import { errorResponse, successResponse } from '@/lib/response';
 import { validator } from '@/middlewares/validator';
 import { verifyToken } from '@/lib/turnstile';

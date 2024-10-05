@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import type { APIRoute } from 'astro';
 
-import urlController from '@/controllers/url';
+import urlController from '@/controllers/url.controller';
 
 const app = new Hono().basePath('/api/');
 

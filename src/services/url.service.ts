@@ -1,6 +1,6 @@
 import { hash } from 'bcrypt';
 
-import { urlRepository } from '@/repositories/url';
+import { urlRepository } from '@/repositories/url.repository';
 
 import { generateSecureKey, hashIdentifier } from '@/lib/crypto.server';
 import { DESTRUCTION_KEY_BYTES } from '@/constants/url';
