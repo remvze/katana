@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Turnstile from 'react-turnstile';
+import Turnstile, { useTurnstile } from 'react-turnstile';
 import { FaCopy, FaCheck } from 'react-icons/fa6';
 
 import { Container } from '../container';
@@ -21,6 +21,7 @@ export function ShortenForm() {
   const siteKey = config.turnstile.publicSiteKey;
   const unshortenLink = config.other.publicUnshortenLink;
 
+  const turnstile = useTurnstile();
   const [mountTurnstile, setMountTurnstile] = useState(false);
   const [token, setToken] = useState('');
 
@@ -61,6 +62,7 @@ export function ShortenForm() {
     });
 
     setIsLoading(false);
+    turnstile.reset();
 
     if (response.success) {
       console.log({ response });

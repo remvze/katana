@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Turnstile from 'react-turnstile';
+import Turnstile, { useTurnstile } from 'react-turnstile';
 
 import { Container } from '../container';
 
@@ -8,6 +8,8 @@ import { config } from '@/config';
 
 export function DeleteUrl() {
   const siteKey = config.turnstile.publicSiteKey;
+
+  const turnstile = useTurnstile();
 
   const [destructionKey, setDestructionKey] = useState('');
   const [error, setError] = useState('');
@@ -25,6 +27,8 @@ export function DeleteUrl() {
 
     setError('');
     setSuccess(false);
+
+    turnstile.reset();
 
     const response = await deleteUrl(destructionKey, token);
 
