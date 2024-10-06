@@ -11,13 +11,15 @@ import {
 } from '@/lib/crypto.client';
 import { KEY_LENGTH } from '@/constants/url';
 import { useCopy } from '@/hooks/use-copy';
+import { config } from '@/config';
 
 import styles from './shorten-form.module.css';
 import { cn } from '@/helpers/styles';
 import { createUrl } from '@/api/url';
 
 export function ShortenForm() {
-  const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+  const siteKey = config.turnstile.publicSiteKey;
+  const unshortenLink = config.other.publicUnshortenLink;
 
   const [mountTurnstile, setMountTurnstile] = useState(false);
   const [token, setToken] = useState('');
@@ -139,15 +141,9 @@ export function ShortenForm() {
               <input
                 readOnly
                 type="text"
-                value={`${import.meta.env.PUBLIC_UNSHORTENER_LINK}#${result}`}
+                value={`${unshortenLink}#${result}`}
               />
-              <button
-                onClick={() =>
-                  copyLink(
-                    `${import.meta.env.PUBLIC_UNSHORTENER_LINK}#${result}`,
-                  )
-                }
-              >
+              <button onClick={() => copyLink(`${unshortenLink}#${result}`)}>
                 {copyingLink ? <FaCheck /> : <FaCopy />}
               </button>
             </div>
