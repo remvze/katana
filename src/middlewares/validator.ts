@@ -1,6 +1,7 @@
-import type { ZodTypeDef, ZodType } from 'zod';
 import { zValidator } from '@hono/zod-validator';
+import type { ZodTypeDef, ZodType } from 'zod';
 import type { ValidationTargets } from 'hono';
+
 import { errorResponse } from '@/lib/response';
 
 export const validator = (
