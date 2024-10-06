@@ -1,4 +1,4 @@
-import { hash } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 
 import { urlRepository } from '@/repositories/url.repository';
 
@@ -38,4 +38,23 @@ export async function getUrl(identifier: string) {
   await urlRepository.updateUrl(id, { clicks: clicks + 1 });
 
   return { ...data, clicks: clicks + 1 };
+}
+
+export async function deleteUrl(destructionKey: string) {
+  const [id, destructionKeyValue] = destructionKey.split(':');
+
+  if (!id || !destructionKey) throw new Error('Invalid destruction key');
+
+  const url = await urlRepository.getUrlById(id);
+
+  if (!url || url.is_deleted) throw new Error("Url doesn't exists");
+
+  const isDestructionKeyValid = await compare(
+    destructionKeyValue,
+    url.destruction_key,
+  );
+
+  if (!isDestructionKeyValid) throw new Error('Invalid destruction key');
+
+  await urlRepository.deleteUrl(id);
 }

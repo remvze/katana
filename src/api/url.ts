@@ -35,3 +35,14 @@ export async function getUrl(
     headers: { 'Content-Type': 'application/json' },
   });
 }
+
+export async function deleteUrl(
+  destructionKey: string,
+  token: string,
+): Promise<APIResponse<null>> {
+  return apiClient<null>('/api/urls/delete', {
+    body: JSON.stringify({ destructionKey, token }),
+    headers: { 'Content-Type': 'application/json' },
+    method: 'POST',
+  });
+}

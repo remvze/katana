@@ -24,6 +24,21 @@ class UrlRepository {
 
     if (error) throw error;
 
+    if (data[0]?.is_deleted) return null;
+
+    return data[0] || null;
+  }
+
+  async getUrlById(id: string) {
+    const { data, error } = await supabase
+      .from(this.table)
+      .select('*')
+      .eq('id', id);
+
+    if (error) throw error;
+
+    if (data[0]?.is_deleted) return null;
+
     return data[0] || null;
   }
 
@@ -34,6 +49,17 @@ class UrlRepository {
     const { data, error } = await supabase
       .from(this.table)
       .update(updatedUrl)
+      .eq('id', id);
+
+    if (error) throw error;
+
+    return data;
+  }
+
+  async deleteUrl(id: string) {
+    const { data, error } = await supabase
+      .from(this.table)
+      .update({ encrypted_url: '[DELETED]', is_deleted: true })
       .eq('id', id);
 
     if (error) throw error;
