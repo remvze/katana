@@ -27,40 +27,10 @@ export function generateSecureKey(bytes: number) {
   return buffer.toString('hex');
 }
 
-async function sha256(str: string): Promise<Uint8Array> {
-  const buffer = Buffer.from(str, 'utf-8');
+export function sha256(str: string) {
   const hash = crypto.createHash('sha256');
-  hash.update(buffer as crypto.BinaryLike);
-  return Uint8Array.from(hash.digest());
-}
 
-function bufferToHex(buffer: Uint8Array): string {
-  return Array.prototype.map
-    .call(buffer, (x: number) => ('00' + x.toString(16)).slice(-2))
-    .join('');
-}
+  hash.update(str);
 
-export async function hashIdentifier(key: string): Promise<string> {
-  const keyData = Buffer.from(key, 'utf-8');
-
-  const salt = await sha256(key);
-  const iterations = 150000;
-  const keyLength = 32;
-
-  const derivedKey = crypto.pbkdf2Sync(
-    new Uint8Array(keyData),
-    new Uint8Array(salt),
-    iterations,
-    keyLength,
-    'sha256',
-  );
-
-  const identifierHash = crypto
-    .createHash('sha256')
-    .update(new Uint8Array(derivedKey))
-    .digest();
-
-  const identifierHex = bufferToHex(Uint8Array.from(identifierHash));
-
-  return identifierHex;
+  return hash.digest('hex');
 }

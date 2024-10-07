@@ -16,11 +16,11 @@ class UrlRepository {
     return data;
   }
 
-  async getUrl(hashedIdentifier: string) {
+  async getUrl(hashedSlug: string) {
     const { data, error } = await supabase
       .from(this.table)
       .select('*')
-      .eq('hashed_identifier', hashedIdentifier);
+      .eq('hashed_slug', hashedSlug);
 
     if (error) throw error;
 

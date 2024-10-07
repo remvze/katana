@@ -1,15 +1,23 @@
 import { useState, useEffect } from 'react';
 
-import { decrypt, createIdentifier } from '@/lib/crypto.client';
-import { getUrl } from '@/api/url';
+import { decrypt } from '@/lib/crypto.client';
 
-export function EncryptedUrl() {
+interface EncryptedUrlProps {
+  clicks: number;
+  encryptedUrl: string;
+  isPasswordProtected: boolean;
+}
+
+export function EncryptedUrl({
+  clicks,
+  encryptedUrl,
+  isPasswordProtected,
+}: EncryptedUrlProps) {
   const [error, setError] = useState('');
   const [result, setResult] = useState('');
   const [encrypted, setEncrypted] = useState('');
-  const [isPasswordProtected, setIsPasswordProtected] = useState(false);
   const [password, setPassword] = useState('');
-  const [clicks, setClicks] = useState(0);
+  const [askPassword, setAskPassword] = useState(false);
 
   useEffect(() => {
     const hash = location.hash.split('#')[1];
@@ -17,31 +25,18 @@ export function EncryptedUrl() {
     if (!hash) return setError('No decryption key');
 
     const decryptUrl = async () => {
-      const identifier = await createIdentifier(hash);
-
-      const response = await getUrl(identifier);
-
-      if (!response.success) {
-        window.location.href = '/404';
-        return;
-      }
-
-      const { clicks, encryptedUrl, isPasswordProtected } = response.data;
-
-      setClicks(clicks);
-
       const decrypted = await decrypt(encryptedUrl, hash);
 
       if (isPasswordProtected) {
         setEncrypted(decrypted);
-        setIsPasswordProtected(true);
+        setAskPassword(true);
       } else {
         setResult(decrypted);
       }
     };
 
     decryptUrl();
-  }, []);
+  }, [isPasswordProtected, encryptedUrl]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -66,7 +61,7 @@ export function EncryptedUrl() {
         {clicks} clicks
       </p>
     );
-  if (isPasswordProtected)
+  if (askPassword)
     return (
       <form onSubmit={handleSubmit}>
         <input

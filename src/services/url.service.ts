@@ -2,37 +2,50 @@ import { compare, hash } from 'bcrypt';
 
 import { urlRepository } from '@/repositories/url.repository';
 
-import { generateSecureKey, hashIdentifier } from '@/lib/crypto.server';
-import { DESTRUCTION_KEY_BYTES } from '@/constants/url';
+import {
+  generateSecureKey,
+  generateSecureSlug,
+  sha256,
+} from '@/lib/crypto.server';
+import { DESTRUCTION_KEY_BYTES, SLUG_LENGTH } from '@/constants/url';
 
 export async function createUrl(
   encryptedUrl: string,
-  identifier: string,
   isPasswordProtected: boolean = false,
 ) {
-  const hashedIdentifier = await hashIdentifier(identifier);
+  let slug;
+  let slugExists = true;
 
-  const shortUrl = await urlRepository.getUrl(hashedIdentifier);
+  do {
+    slug = await generateSecureSlug(SLUG_LENGTH);
+    const hashedSlug = sha256(slug);
 
-  if (shortUrl) throw new Error('Identifier exists');
+    const shortUrl = await urlRepository.getUrl(hashedSlug);
+
+    if (!shortUrl) slugExists = false;
+  } while (slugExists);
+
+  const hashedSlug = sha256(slug);
 
   const destructionKey = generateSecureKey(DESTRUCTION_KEY_BYTES);
   const destructionKeyHash = await hash(destructionKey, 12);
 
-  const url = await urlRepository.createUrl({
+  await urlRepository.createUrl({
     destruction_key: destructionKeyHash,
     encrypted_url: encryptedUrl,
-    hashed_identifier: hashedIdentifier,
+    hashed_slug: hashedSlug,
     is_password_protected: isPasswordProtected,
   });
 
-  return { destructionKey: `${url?.id}:${destructionKey}` };
+  return { destructionKey: `${slug}:${destructionKey}`, slug };
 }
 
-export async function getUrl(identifier: string) {
-  const hashedIdentifier = await hashIdentifier(identifier);
+export async function getUrl(slug: string) {
+  const hashedSlug = sha256(slug);
 
-  const data = await urlRepository.getUrl(hashedIdentifier);
+  const data = await urlRepository.getUrl(hashedSlug);
+
+  if (data === null) return data;
 
   const { clicks, id } = data;
   await urlRepository.updateUrl(id, { clicks: clicks + 1 });
@@ -41,11 +54,12 @@ export async function getUrl(identifier: string) {
 }
 
 export async function deleteUrl(destructionKey: string) {
-  const [id, destructionKeyValue] = destructionKey.split(':');
+  const [slug, destructionKeyValue] = destructionKey.split(':');
 
-  if (!id || !destructionKey) throw new Error('Invalid destruction key');
+  if (!slug || !destructionKey) throw new Error('Invalid destruction key');
 
-  const url = await urlRepository.getUrlById(id);
+  const hashedSlug = sha256(slug);
+  const url = await urlRepository.getUrl(hashedSlug);
 
   if (!url || url.is_deleted) throw new Error("Url doesn't exists");
 
@@ -56,5 +70,5 @@ export async function deleteUrl(destructionKey: string) {
 
   if (!isDestructionKeyValid) throw new Error('Invalid destruction key');
 
-  await urlRepository.deleteUrl(id);
+  await urlRepository.deleteUrl(url.id);
 }

@@ -4,11 +4,7 @@ import { FaCopy, FaCheck } from 'react-icons/fa6';
 
 import { Container } from '../container';
 
-import {
-  generateSecureKey,
-  encrypt,
-  createIdentifier,
-} from '@/lib/crypto.client';
+import { generateSecureKey, encrypt } from '@/lib/crypto.client';
 import { KEY_LENGTH } from '@/constants/url';
 import { useCopy } from '@/hooks/use-copy';
 import { config } from '@/config';
@@ -45,7 +41,6 @@ export function ShortenForm() {
     setIsLoading(true);
 
     const key = await generateSecureKey(KEY_LENGTH);
-    const identifier = await createIdentifier(key);
     let encrypted = url;
 
     if (password) {
@@ -56,7 +51,6 @@ export function ShortenForm() {
 
     const response = await createUrl({
       encryptedUrl: encrypted,
-      identifier,
       isPasswordProtected: !!password,
       token,
     });
@@ -65,9 +59,8 @@ export function ShortenForm() {
     turnstile.reset();
 
     if (response.success) {
-      console.log({ response });
       setDestructionKey(response.data.destructionKey);
-      setResult(`${key}`);
+      setResult(`${response.data.slug}#${key}`);
     }
   };
 
@@ -140,12 +133,8 @@ export function ShortenForm() {
           <div className={styles.field}>
             <label htmlFor="shortUrl">Short URL</label>
             <div className={styles.inputWrapper}>
-              <input
-                readOnly
-                type="text"
-                value={`${unshortenLink}#${result}`}
-              />
-              <button onClick={() => copyLink(`${unshortenLink}#${result}`)}>
+              <input readOnly type="text" value={`${unshortenLink}${result}`} />
+              <button onClick={() => copyLink(`${unshortenLink}${result}`)}>
                 {copyingLink ? <FaCheck /> : <FaCopy />}
               </button>
             </div>

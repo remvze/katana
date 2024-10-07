@@ -10,25 +10,22 @@ const app = new Hono();
 
 const newSchema = z.object({
   encryptedUrl: z.string(),
-  identifier: z.string(),
   isPasswordProtected: z.boolean(),
   token: z.string(),
 });
 
 app.post('/new', validator('json', newSchema), async c => {
-  const { encryptedUrl, identifier, isPasswordProtected, token } =
-    await c.req.json();
+  const { encryptedUrl, isPasswordProtected, token } = await c.req.json();
 
   const tokenIsValid = await verifyToken(token);
 
   if (tokenIsValid) {
-    const { destructionKey } = await createUrl(
+    const { destructionKey, slug } = await createUrl(
       encryptedUrl,
-      identifier,
       !!isPasswordProtected || false,
     );
 
-    return c.json(successResponse({ destructionKey }), 200);
+    return c.json(successResponse({ destructionKey, slug }), 200);
   } else {
     return c.json(errorResponse('Verification failed.'), 400);
   }

@@ -1,0 +1,22 @@
+---
+import Layout from '@/layouts/layout.astro';
+import { EncryptedUrl } from '@/components/encrypted-url';
+import { getUrl } from '@/services/url.service';
+
+const { slug } = Astro.params;
+
+const data = await getUrl(slug!);
+
+if (!data) {
+  return Astro.rewrite('/404');
+}
+---
+
+<Layout>
+  <EncryptedUrl
+    clicks={data.clicks}
+    client:load
+    encryptedUrl={data.encrypted_url}
+    isPasswordProtected={data.is_password_protected}
+  />
+</Layout>

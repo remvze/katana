@@ -3,13 +3,13 @@ import type { APIResponse } from '@/lib/response';
 
 interface NewUrl {
   encryptedUrl: string;
-  identifier: string;
   isPasswordProtected: boolean;
   token: string;
 }
 
 interface CreateUrlResponse {
   destructionKey: string;
+  slug: string;
 }
 
 export async function createUrl(
