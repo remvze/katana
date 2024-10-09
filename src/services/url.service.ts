@@ -1,6 +1,7 @@
 import { compare, hash } from 'bcrypt';
 
 import { urlRepository } from '@/repositories/url.repository';
+import { UrlEntity } from '@/entities/url.entity';
 
 import {
   generateSecureKey,
@@ -30,27 +31,36 @@ export async function createUrl(
   const destructionKey = generateSecureKey(DESTRUCTION_KEY_BYTES);
   const destructionKeyHash = await hash(destructionKey, 12);
 
-  await urlRepository.createUrl({
+  const urlEntity = new UrlEntity({
+    clicks: 0,
+    createdAt: new Date(),
     destructionKey: destructionKeyHash,
     encryptedUrl: encryptedUrl,
     hashedSlug: hashedSlug,
+    id: '',
+    isDeleted: false,
     isPasswordProtected: isPasswordProtected,
+    updatedAt: new Date(),
   });
+
+  await urlRepository.createUrl(urlEntity);
 
   return { destructionKey: `${slug}:${destructionKey}`, slug };
 }
 
 export async function getUrl(slug: string) {
   const hashedSlug = sha256(slug);
+  const entity = await urlRepository.getUrl(hashedSlug);
 
-  const data = await urlRepository.getUrl(hashedSlug);
+  if (entity && entity.isActive()) {
+    entity.incrementClick();
 
-  if (data === null) return data;
+    await urlRepository.updateUrl(entity.id, entity);
 
-  const { clicks, id } = data;
-  await urlRepository.updateUrl(id, { clicks: clicks + 1 });
+    return entity;
+  }
 
-  return { ...data, clicks: clicks + 1 };
+  return null;
 }
 
 export async function deleteUrl(destructionKey: string) {
@@ -59,16 +69,16 @@ export async function deleteUrl(destructionKey: string) {
   if (!slug || !destructionKey) throw new Error('Invalid destruction key');
 
   const hashedSlug = sha256(slug);
-  const url = await urlRepository.getUrl(hashedSlug);
+  const entity = await urlRepository.getUrl(hashedSlug);
 
-  if (!url || url.isDeleted) throw new Error("Url doesn't exists");
+  if (!entity || !entity.isActive()) throw new Error("Url doesn't exists");
 
   const isDestructionKeyValid = await compare(
     destructionKeyValue,
-    url.destructionKey,
+    entity.destructionKey,
   );
 
   if (!isDestructionKeyValid) throw new Error('Invalid destruction key');
 
-  await urlRepository.deleteUrl(url.id);
+  await urlRepository.deleteUrl(entity.id);
 }

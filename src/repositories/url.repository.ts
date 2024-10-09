@@ -2,69 +2,59 @@ import { Types } from 'mongoose';
 
 import UrlModel from '@/models/url.model';
 import { dbConnect } from '@/database/mongo';
-import {
-  fromCreateUrlDTO,
-  fromUpdateUrlDTO,
-  toUrlDTO,
-} from '@/mappers/url.mapper';
 import type { UrlDocument } from '@/models/url.model';
-import type { CreateUrlDTO, UpdateUrlDTO } from '@/dtos/url.dto';
+
+import { UrlEntity } from '@/entities/url.entity';
+import { UrlMapper } from '@/mappers/url.mapper';
 
 class UrlRepository {
-  async createUrl(url: CreateUrlDTO) {
+  async createUrl(entity: UrlEntity): Promise<UrlEntity | null> {
     await dbConnect();
 
-    const newUrl = fromCreateUrlDTO(url);
+    const newUrl = UrlMapper.toDocument(entity);
+    const doc = await UrlModel.create(newUrl);
 
-    const data = await UrlModel.create(newUrl);
-
-    return data ? toUrlDTO(data.toObject()) : null;
+    return doc ? UrlMapper.toEntity(doc.toObject()) : null;
   }
 
-  async getUrl(hashedSlug: string) {
+  async getUrl(hashedSlug: string): Promise<UrlEntity | null> {
     await dbConnect();
 
-    const data = await UrlModel.findOne({
+    const doc = await UrlModel.findOne({
       hashed_slug: hashedSlug,
     }).lean<UrlDocument>();
 
-    if (data?.is_deleted) return null;
-
-    return data ? toUrlDTO(data) : null;
+    return doc ? UrlMapper.toEntity(doc) : null;
   }
 
-  async getUrlById(id: string) {
+  async getUrlById(id: string): Promise<UrlEntity | null> {
     await dbConnect();
 
-    const data = await UrlModel.findById(
+    const doc = await UrlModel.findById(
       new Types.ObjectId(id),
     ).lean<UrlDocument>();
 
-    if (data?.is_deleted) return null;
-
-    return data ? toUrlDTO(data) : null;
+    return doc ? UrlMapper.toEntity(doc) : null;
   }
 
-  async updateUrl(id: string, updatedUrl: UpdateUrlDTO) {
+  async updateUrl(id: string, entity: UrlEntity): Promise<UrlEntity | null> {
     await dbConnect();
 
-    const updated = fromUpdateUrlDTO(updatedUrl);
-
-    const data = await UrlModel.findByIdAndUpdate(
+    const doc = await UrlModel.findByIdAndUpdate(
       new Types.ObjectId(id),
-      updated,
+      UrlMapper.toDocument(entity),
       {
         new: true,
       },
     ).lean<UrlDocument>();
 
-    return data ? toUrlDTO(data) : null;
+    return doc ? UrlMapper.toEntity(doc) : null;
   }
 
-  async deleteUrl(id: string) {
+  async deleteUrl(id: string): Promise<UrlEntity | null> {
     await dbConnect();
 
-    const data = await UrlModel.findByIdAndUpdate(
+    const doc = await UrlModel.findByIdAndUpdate(
       new Types.ObjectId(id),
       {
         encrypted_url: '[DELETED]',
@@ -73,7 +63,7 @@ class UrlRepository {
       { new: true },
     ).lean<UrlDocument>();
 
-    return data ? toUrlDTO(data) : null;
+    return doc ? UrlMapper.toEntity(doc) : null;
   }
 }
 
