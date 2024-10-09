@@ -1,7 +1,11 @@
-import type { Document } from 'mongoose';
+import type { Document, Types } from 'mongoose';
 
-export function normalizeId(doc: Document) {
-  const { _id, ...rest } = doc.toObject();
+interface SimpleDocument extends Document {
+  _id: Types.ObjectId;
+}
+
+export function normalizeId(doc: SimpleDocument) {
+  const { _id, ...rest } = doc;
 
   return { ...rest, id: _id.toString() };
 }

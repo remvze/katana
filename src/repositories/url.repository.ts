@@ -12,7 +12,7 @@ class UrlRepository {
 
     const doc = await UrlModel.create(urlData);
 
-    return doc ? normalizeId(doc) : null;
+    return doc ? normalizeId(doc.toObject()) : null;
   }
 
   async getUrl(hashedSlug: string) {
