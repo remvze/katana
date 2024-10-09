@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import type { Types } from 'mongoose';
 
-export interface IUrl extends mongoose.Document {
+export interface UrlDocument extends mongoose.Document {
   _id: Types.ObjectId;
   clicks: number;
   createdAt: Date;
@@ -13,7 +13,7 @@ export interface IUrl extends mongoose.Document {
   updatedAt: Date;
 }
 
-const UrlSchema = new mongoose.Schema<IUrl>(
+const UrlSchema = new mongoose.Schema<UrlDocument>(
   {
     clicks: {
       default: 0,
@@ -45,4 +45,5 @@ const UrlSchema = new mongoose.Schema<IUrl>(
   },
 );
 
-export default mongoose.models.Url || mongoose.model<IUrl>('Url', UrlSchema);
+export default mongoose.models.Url ||
+  mongoose.model<UrlDocument>('Url', UrlSchema);

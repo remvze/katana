@@ -47,8 +47,8 @@ export async function getUrl(slug: string) {
 
   if (data === null) return data;
 
-  const { _id, clicks } = data;
-  await urlRepository.updateUrl(_id, { clicks: clicks + 1 });
+  const { clicks, id } = data;
+  await urlRepository.updateUrl(id, { clicks: clicks + 1 });
 
   return { ...data, clicks: clicks + 1 };
 }
@@ -61,14 +61,14 @@ export async function deleteUrl(destructionKey: string) {
   const hashedSlug = sha256(slug);
   const url = await urlRepository.getUrl(hashedSlug);
 
-  if (!url || url.is_deleted) throw new Error("Url doesn't exists");
+  if (!url || url.isDeleted) throw new Error("Url doesn't exists");
 
   const isDestructionKeyValid = await compare(
     destructionKeyValue,
-    url.destruction_key,
+    url.destructionKey,
   );
 
   if (!isDestructionKeyValid) throw new Error('Invalid destruction key');
 
-  await urlRepository.deleteUrl(url._id);
+  await urlRepository.deleteUrl(url.id);
 }
