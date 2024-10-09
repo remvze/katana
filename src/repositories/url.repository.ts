@@ -1,68 +1,61 @@
-import { supabase } from '@/lib/supabase';
-import type { Url } from '@/types/url';
+import type { Types } from 'mongoose';
+
+import UrlModel from '@/models/url.model';
+import type { IUrl } from '@/models/url.model';
+import { dbConnect } from '@/database/mongo';
 
 class UrlRepository {
-  private table = 'katana.urls';
+  async createUrl(url: Partial<IUrl>) {
+    await dbConnect();
 
-  async createUrl(url: Partial<Url>) {
-    const { data, error } = await supabase
-      .from(this.table)
-      .insert([url])
-      .select('id')
-      .single();
+    const data = await UrlModel.create(url);
 
-    if (error) throw error;
-
-    return data;
+    return data.toObject() as IUrl;
   }
 
   async getUrl(hashedSlug: string) {
-    const { data, error } = await supabase
-      .from(this.table)
-      .select('*')
-      .eq('hashed_slug', hashedSlug);
+    await dbConnect();
 
-    if (error) throw error;
+    const data = await UrlModel.findOne({
+      hashed_slug: hashedSlug,
+    }).lean<IUrl>();
 
-    if (data[0]?.is_deleted) return null;
-
-    return data[0] || null;
-  }
-
-  async getUrlById(id: string) {
-    const { data, error } = await supabase
-      .from(this.table)
-      .select('*')
-      .eq('id', id);
-
-    if (error) throw error;
-
-    if (data[0]?.is_deleted) return null;
-
-    return data[0] || null;
-  }
-
-  async updateUrl(
-    id: string,
-    updatedUrl: Partial<Omit<Url, 'id' | 'created_at'>>,
-  ) {
-    const { data, error } = await supabase
-      .from(this.table)
-      .update(updatedUrl)
-      .eq('id', id);
-
-    if (error) throw error;
+    if (data?.is_deleted) return null;
 
     return data;
   }
 
-  async deleteUrl(id: string) {
-    const { data, error } = await supabase
-      .from(this.table)
-      .update({ encrypted_url: '[DELETED]', is_deleted: true })
-      .eq('id', id);
+  async getUrlById(id: Types.ObjectId) {
+    await dbConnect();
 
-    if (error) throw error;
+    const data = await UrlModel.findById(id).lean<IUrl>();
+
+    if (data?.is_deleted) return null;
+
+    return data;
+  }
+
+  async updateUrl(id: Types.ObjectId, updatedUrl: Partial<IUrl>) {
+    await dbConnect();
+
+    const data = await UrlModel.findByIdAndUpdate(id, updatedUrl, {
+      new: true,
+    }).lean<IUrl>();
+
+    return data;
+  }
+
+  async deleteUrl(id: Types.ObjectId) {
+    await dbConnect();
+
+    const data = await UrlModel.findByIdAndUpdate(
+      id,
+      {
+        encrypted_url: '[DELETED]',
+        is_deleted: true,
+      },
+      { new: true },
+    ).lean<IUrl>();
 
     return data;
   }

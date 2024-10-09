@@ -2,6 +2,7 @@
 /// <reference types="astro/client" />
 
 interface ImportMetaEnv {
+  readonly MONGODB_URI: string;
   readonly PUBLIC_TURNSTILE_SITE_KEY: string;
   readonly PUBLIC_UNSHORTENER_LINK: string;
   readonly SUPABASE_KEY: string;

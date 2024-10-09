@@ -33,6 +33,7 @@
     "bcrypt": "5.1.1",
     "framer-motion": "11.5.4",
     "hono": "4.6.3",
+    "mongoose": "8.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "5.0.1",

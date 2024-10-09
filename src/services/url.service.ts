@@ -47,8 +47,8 @@ export async function getUrl(slug: string) {
 
   if (data === null) return data;
 
-  const { clicks, id } = data;
-  await urlRepository.updateUrl(id, { clicks: clicks + 1 });
+  const { _id, clicks } = data;
+  await urlRepository.updateUrl(_id, { clicks: clicks + 1 });
 
   return { ...data, clicks: clicks + 1 };
 }
@@ -70,5 +70,5 @@ export async function deleteUrl(destructionKey: string) {
 
   if (!isDestructionKeyValid) throw new Error('Invalid destruction key');
 
-  await urlRepository.deleteUrl(url.id);
+  await urlRepository.deleteUrl(url._id);
 }
