@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import Turnstile, { useTurnstile } from 'react-turnstile';
 import { FaCopy, FaCheck } from 'react-icons/fa6';
 
-import { Container } from '../container';
-
 import { generateSecureKey, encrypt } from '@/lib/crypto.client';
 import { KEY_LENGTH } from '@/constants/url';
 import { useCopy } from '@/hooks/use-copy';
@@ -73,7 +71,7 @@ export function ShortenForm() {
   };
 
   return (
-    <Container>
+    <>
       {!result && (
         <form
           className={cn(styles.form, isLoading && styles.disabled)}
@@ -158,6 +156,6 @@ export function ShortenForm() {
           </button>
         </div>
       )}
-    </Container>
+    </>
   );
 }
