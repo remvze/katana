@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { z } from 'zod';
 
-import { createUrl, getUrl, deleteUrl } from '@/services/url.service';
+import { createUrl, deleteUrl } from '@/services/url.service';
 import { errorResponse, successResponse } from '@/lib/response';
 import { validator } from '@/middlewares/validator';
 import { verifyToken } from '@/lib/turnstile';
@@ -29,25 +29,6 @@ app.post('/new', validator('json', newSchema), async c => {
   } else {
     return c.json(errorResponse('Verification failed.'), 400);
   }
-});
-
-app.get('/:identifier', async c => {
-  const identifier = c.req.param('identifier');
-
-  const data = await getUrl(identifier!);
-
-  if (data) {
-    return c.json(
-      successResponse({
-        clicks: data.clicks,
-        encryptedUrl: data.encrypted_url,
-        isPasswordProtected: data.is_password_protected,
-      }),
-      200,
-    );
-  }
-
-  return c.json(errorResponse('Not found'), 404);
 });
 
 const deleteSchema = z.object({

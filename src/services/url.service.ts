@@ -32,15 +32,10 @@ export async function createUrl(
   const destructionKeyHash = await hash(destructionKey, 12);
 
   const urlEntity = new UrlEntity({
-    clicks: 0,
-    createdAt: new Date(),
     destructionKey: destructionKeyHash,
     encryptedUrl: encryptedUrl,
     hashedSlug: hashedSlug,
-    id: '',
-    isDeleted: false,
     isPasswordProtected: isPasswordProtected,
-    updatedAt: new Date(),
   });
 
   await urlRepository.createUrl(urlEntity);

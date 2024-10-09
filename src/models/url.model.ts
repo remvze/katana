@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
-import type { Types, Document } from 'mongoose';
+import type { Document } from 'mongoose';
 
 export interface UrlDocument extends Document {
-  _id: Types.ObjectId;
   clicks: number;
   createdAt: Date;
   destruction_key: string;
