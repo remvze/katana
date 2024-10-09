@@ -2,22 +2,17 @@ import { Types } from 'mongoose';
 
 import { dbConnect } from '@/database/mongo';
 import UrlModel from '@/models/url.model';
+import { normalizeId } from '@/lib/normalizer';
 
 import type { UrlDocument } from '@/models/url.model';
 
 class UrlRepository {
-  private normalize(doc: UrlDocument) {
-    const { _id, ...rest } = doc;
-
-    return { ...rest, id: _id.toString() };
-  }
-
   async createUrl(urlData: Partial<UrlDocument>) {
     await dbConnect();
 
     const doc = await UrlModel.create(urlData);
 
-    return doc ? this.normalize(doc.toObject()) : null;
+    return doc ? normalizeId(doc) : null;
   }
 
   async getUrl(hashedSlug: string) {
@@ -27,7 +22,7 @@ class UrlRepository {
 
     if (!document || document?.isDeleted) return null;
 
-    return this.normalize(document);
+    return normalizeId(document);
   }
 
   async getUrlById(id: string) {
@@ -39,7 +34,7 @@ class UrlRepository {
 
     if (!document || document?.isDeleted) return null;
 
-    return this.normalize(document);
+    return normalizeId(document);
   }
 
   async updateUrl(id: string, updateData: Partial<UrlDocument>) {
@@ -53,7 +48,7 @@ class UrlRepository {
       },
     ).lean<UrlDocument>();
 
-    return document ? this.normalize(document) : null;
+    return document ? normalizeId(document) : null;
   }
 
   async deleteUrl(id: string) {
@@ -64,7 +59,7 @@ class UrlRepository {
       { new: true },
     ).lean<UrlDocument>();
 
-    return document ? this.normalize(document) : null;
+    return document ? normalizeId(document) : null;
   }
 }
 
