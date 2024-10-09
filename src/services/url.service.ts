@@ -1,7 +1,6 @@
 import { compare, hash } from 'bcrypt';
 
 import { urlRepository } from '@/repositories/url.repository';
-import { UrlEntity } from '@/entities/url.entity';
 
 import {
   generateSecureKey,
@@ -31,28 +30,26 @@ export async function createUrl(
   const destructionKey = generateSecureKey(DESTRUCTION_KEY_BYTES);
   const destructionKeyHash = await hash(destructionKey, 12);
 
-  const urlEntity = new UrlEntity({
+  await urlRepository.createUrl({
     destructionKey: destructionKeyHash,
     encryptedUrl: encryptedUrl,
     hashedSlug: hashedSlug,
     isPasswordProtected: isPasswordProtected,
   });
 
-  await urlRepository.createUrl(urlEntity);
-
   return { destructionKey: `${slug}:${destructionKey}`, slug };
 }
 
 export async function getUrl(slug: string) {
   const hashedSlug = sha256(slug);
-  const entity = await urlRepository.getUrl(hashedSlug);
+  const url = await urlRepository.getUrl(hashedSlug);
 
-  if (entity && entity.isActive()) {
-    entity.incrementClick();
+  if (url) {
+    const updatedUrl = await urlRepository.updateUrl(url.id, {
+      clicks: url.clicks + 1,
+    });
 
-    await urlRepository.updateUrl(entity.id, entity);
-
-    return entity;
+    return updatedUrl;
   }
 
   return null;
@@ -64,16 +61,16 @@ export async function deleteUrl(destructionKey: string) {
   if (!slug || !destructionKey) throw new Error('Invalid destruction key');
 
   const hashedSlug = sha256(slug);
-  const entity = await urlRepository.getUrl(hashedSlug);
+  const url = await urlRepository.getUrl(hashedSlug);
 
-  if (!entity || !entity.isActive()) throw new Error("Url doesn't exists");
+  if (!url) throw new Error("Url doesn't exists");
 
   const isDestructionKeyValid = await compare(
     destructionKeyValue,
-    entity.destructionKey,
+    url.destructionKey,
   );
 
   if (!isDestructionKeyValid) throw new Error('Invalid destruction key');
 
-  await urlRepository.deleteUrl(entity.id);
+  await urlRepository.deleteUrl(url.id);
 }

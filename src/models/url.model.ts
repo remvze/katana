@@ -1,47 +1,28 @@
-import mongoose from 'mongoose';
-import type { Document } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
+import type { Document, Types } from 'mongoose';
 
 export interface UrlDocument extends Document {
+  _id: Types.ObjectId;
   clicks: number;
   createdAt: Date;
-  destruction_key: string;
-  encrypted_url: string;
-  hashed_slug: string;
-  is_deleted: boolean;
-  is_password_protected: boolean;
+  destructionKey: string;
+  encryptedUrl: string;
+  hashedSlug: string;
+  isDeleted: boolean;
+  isPasswordProtected: boolean;
   updatedAt: Date;
 }
 
-const UrlSchema = new mongoose.Schema<UrlDocument>(
+const UrlSchema = new Schema<UrlDocument>(
   {
-    clicks: {
-      default: 0,
-      type: Number,
-    },
-    destruction_key: {
-      required: true,
-      type: String,
-    },
-    encrypted_url: {
-      require: true,
-      type: String,
-    },
-    hashed_slug: {
-      require: true,
-      type: String,
-    },
-    is_deleted: {
-      default: false,
-      type: Boolean,
-    },
-    is_password_protected: {
-      default: false,
-      type: Boolean,
-    },
+    clicks: { default: 0, type: Number },
+    destructionKey: { required: true, type: String },
+    encryptedUrl: { required: true, type: String },
+    hashedSlug: { required: true, type: String },
+    isDeleted: { default: false, type: Boolean },
+    isPasswordProtected: { default: false, type: Boolean },
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true },
 );
 
 export default mongoose.models.Url ||
