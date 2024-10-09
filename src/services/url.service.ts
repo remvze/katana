@@ -31,10 +31,10 @@ export async function createUrl(
   const destructionKeyHash = await hash(destructionKey, 12);
 
   await urlRepository.createUrl({
-    destruction_key: destructionKeyHash,
-    encrypted_url: encryptedUrl,
-    hashed_slug: hashedSlug,
-    is_password_protected: isPasswordProtected,
+    destructionKey: destructionKeyHash,
+    encryptedUrl: encryptedUrl,
+    hashedSlug: hashedSlug,
+    isPasswordProtected: isPasswordProtected,
   });
 
   return { destructionKey: `${slug}:${destructionKey}`, slug };

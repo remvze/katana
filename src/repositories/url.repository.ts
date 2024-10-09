@@ -1,46 +1,24 @@
 import { Types } from 'mongoose';
 
 import UrlModel from '@/models/url.model';
-import type { UrlDocument } from '@/models/url.model';
 import { dbConnect } from '@/database/mongo';
-import type { UrlDTO } from '@/dtos/url.dto';
+import {
+  fromCreateUrlDTO,
+  fromUpdateUrlDTO,
+  toUrlDTO,
+} from '@/mappers/url.mapper';
+import type { UrlDocument } from '@/models/url.model';
+import type { CreateUrlDTO, UpdateUrlDTO } from '@/dtos/url.dto';
 
 class UrlRepository {
-  private toDTO(url: UrlDocument): UrlDTO {
-    const dto: UrlDTO = {
-      clicks: url.clicks,
-      createdAt: url.createdAt,
-      destructionKey: url.destruction_key,
-      encryptedUrl: url.encrypted_url,
-      hashedSlug: url.hashed_slug,
-      id: url._id.toString(),
-      isDeleted: url.is_deleted,
-      isPasswordProtected: url.is_password_protected,
-      updatedAt: url.updatedAt,
-    };
-
-    return dto;
-  }
-
-  private fromDTO(dto: Partial<UrlDTO>): Partial<UrlDocument> {
-    const url: Partial<UrlDocument> = {
-      clicks: dto.clicks,
-      destruction_key: dto.destructionKey,
-      encrypted_url: dto.encryptedUrl,
-      hashed_slug: dto.hashedSlug,
-      is_deleted: dto.isDeleted,
-      is_password_protected: dto.isPasswordProtected,
-    };
-
-    return url;
-  }
-
-  async createUrl(url: Partial<UrlDocument>) {
+  async createUrl(url: CreateUrlDTO) {
     await dbConnect();
 
-    const data = await UrlModel.create(url);
+    const newUrl = fromCreateUrlDTO(url);
 
-    return data ? this.toDTO(data.toObject()) : null;
+    const data = await UrlModel.create(newUrl);
+
+    return data ? toUrlDTO(data.toObject()) : null;
   }
 
   async getUrl(hashedSlug: string) {
@@ -52,7 +30,7 @@ class UrlRepository {
 
     if (data?.is_deleted) return null;
 
-    return data ? this.toDTO(data) : null;
+    return data ? toUrlDTO(data) : null;
   }
 
   async getUrlById(id: string) {
@@ -64,13 +42,13 @@ class UrlRepository {
 
     if (data?.is_deleted) return null;
 
-    return data ? this.toDTO(data) : null;
+    return data ? toUrlDTO(data) : null;
   }
 
-  async updateUrl(id: string, updatedUrl: Partial<UrlDTO>) {
+  async updateUrl(id: string, updatedUrl: UpdateUrlDTO) {
     await dbConnect();
 
-    const updated = this.fromDTO(updatedUrl);
+    const updated = fromUpdateUrlDTO(updatedUrl);
 
     const data = await UrlModel.findByIdAndUpdate(
       new Types.ObjectId(id),
@@ -80,7 +58,7 @@ class UrlRepository {
       },
     ).lean<UrlDocument>();
 
-    return data ? this.toDTO(data) : null;
+    return data ? toUrlDTO(data) : null;
   }
 
   async deleteUrl(id: string) {
@@ -95,7 +73,7 @@ class UrlRepository {
       { new: true },
     ).lean<UrlDocument>();
 
-    return data ? this.toDTO(data) : null;
+    return data ? toUrlDTO(data) : null;
   }
 }
 
