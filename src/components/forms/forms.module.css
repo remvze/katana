@@ -22,6 +22,10 @@
     outline: none;
     transition: 0.2s;
 
+    &:hover {
+      background-color: var(--color-neutral-2);
+    }
+
     &.selected {
       font-weight: 500;
       color: var(--color-foreground);

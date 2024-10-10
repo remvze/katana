@@ -16,7 +16,7 @@
 
       & span {
         font-weight: 400;
-        color: var(--color-foreground-subtle);
+        color: var(--color-foreground-subtler);
       }
     }
 

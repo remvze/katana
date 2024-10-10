@@ -102,13 +102,6 @@ export function ShortenForm() {
               value={password}
               onChange={e => setPassword(e.target.value)}
             />
-            <p>
-              Generate a secure password using{' '}
-              <a href="https://pswd.mvze.net/" rel="noreferrer" target="_blank">
-                PSWD
-              </a>
-              .
-            </p>
           </div>
 
           {mountTurnstile && (
