@@ -8,7 +8,9 @@ import styles from './forms.module.css';
 import { cn } from '@/helpers/styles';
 
 export function Forms() {
-  const [selectedTab, setSelectedTab] = useState<'create' | 'delete'>('create');
+  const [selectedTab, setSelectedTab] = useState<'shorten' | 'delete'>(
+    'shorten',
+  );
 
   return (
     <Container>
@@ -16,11 +18,11 @@ export function Forms() {
         <button
           className={cn(
             styles.tab,
-            selectedTab === 'create' && styles.selected,
+            selectedTab === 'shorten' && styles.selected,
           )}
-          onClick={() => setSelectedTab('create')}
+          onClick={() => setSelectedTab('shorten')}
         >
-          Create URL
+          Shorten URL
         </button>
         <button
           className={cn(
@@ -33,7 +35,7 @@ export function Forms() {
         </button>
       </div>
 
-      {selectedTab === 'create' && <ShortenForm />}
+      {selectedTab === 'shorten' && <ShortenForm />}
       {selectedTab === 'delete' && <DeleteUrl />}
     </Container>
   );
