@@ -20,9 +20,7 @@ class UrlRepository {
 
     const document = await UrlModel.findOne({ hashedSlug }).lean<UrlDocument>();
 
-    if (!document || document?.isDeleted) return null;
-
-    return normalizeId(document);
+    return document ? normalizeId(document) : null;
   }
 
   async getUrlById(id: string) {
@@ -32,9 +30,7 @@ class UrlRepository {
       new Types.ObjectId(id),
     ).lean<UrlDocument>();
 
-    if (!document || document?.isDeleted) return null;
-
-    return normalizeId(document);
+    return document ? normalizeId(document) : null;
   }
 
   async updateUrl(id: string, updateData: Partial<UrlDocument>) {
@@ -53,11 +49,10 @@ class UrlRepository {
 
   async deleteUrl(id: string) {
     await dbConnect();
-    const document = await UrlModel.findByIdAndUpdate(
-      id,
-      { encryptedUrl: '[DELETED]', isDeleted: true },
-      { new: true },
-    ).lean<UrlDocument>();
+
+    const document = await UrlModel.findByIdAndDelete(id, {
+      new: true,
+    }).lean<UrlDocument>();
 
     return document ? normalizeId(document) : null;
   }

@@ -8,7 +8,6 @@ export interface UrlDocument extends Document {
   destructionKey: string;
   encryptedUrl: string;
   hashedSlug: string;
-  isDeleted: boolean;
   isPasswordProtected: boolean;
   updatedAt: Date;
 }
@@ -19,7 +18,6 @@ const UrlSchema = new Schema<UrlDocument>(
     destructionKey: { required: true, type: String },
     encryptedUrl: { required: true, type: String },
     hashedSlug: { required: true, type: String },
-    isDeleted: { default: false, type: Boolean },
     isPasswordProtected: { default: false, type: Boolean },
   },
   { timestamps: true },
