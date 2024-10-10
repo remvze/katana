@@ -116,6 +116,7 @@ export function ShortenForm() {
               className={styles.turnstile}
               sitekey={siteKey}
               size="flexible"
+              theme="dark"
               onVerify={token => setToken(token)}
             />
           )}
