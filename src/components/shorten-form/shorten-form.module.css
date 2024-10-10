@@ -32,6 +32,7 @@
       color: var(--color-foreground);
       background-color: var(--color-neutral-100);
       border: 1px solid var(--color-neutral-200);
+      border-radius: 8px;
       outline: none;
     }
 
@@ -64,6 +65,7 @@
     cursor: pointer;
     background-color: var(--color-neutral-950);
     border: none;
+    border-radius: 8px;
     outline: none;
 
     &:disabled {
@@ -95,6 +97,7 @@
       margin-top: 12px;
       background-color: var(--color-neutral-100);
       border: 1px solid var(--color-neutral-200);
+      border-radius: 8px;
 
       & input {
         flex-grow: 1;
@@ -121,6 +124,7 @@
         cursor: pointer;
         background-color: var(--color-neutral-200);
         border: none;
+        border-radius: 4px;
         outline: none;
       }
     }
@@ -150,6 +154,7 @@
     cursor: pointer;
     background-color: var(--color-neutral-950);
     border: none;
+    border-radius: 8px;
     outline: none;
   }
 }
