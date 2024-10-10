@@ -122,11 +122,11 @@
     font-weight: 500;
     color: var(--color-neutral-1);
     cursor: pointer;
-    background-color: var(--color-accent-1);
+    background-color: var(--color-accent);
     border: none;
-    border-bottom: 3px solid var(--color-neutral-11);
     border-radius: 8px;
     outline: none;
+    transition: 0.2s;
 
     &:focus-visible {
       outline: 3px solid var(--color-neutral-5);
@@ -192,10 +192,8 @@
         font-size: var(--font-sm);
         color: var(--color-foreground-subtle);
         cursor: pointer;
-        background-color: var(--color-neutral-4);
+        background-color: var(--color-neutral-3);
         border: none;
-        border-top: 2px solid var(--color-neutral-5);
-        border-bottom: 3px solid var(--color-neutral-3);
         border-radius: 4px;
         outline: none;
 
@@ -229,9 +227,8 @@
     font-weight: 500;
     color: var(--color-neutral-1);
     cursor: pointer;
-    background-color: var(--color-accent-1);
+    background-color: var(--color-accent);
     border: none;
-    border-bottom: 3px solid var(--color-neutral-11);
     border-radius: 8px;
     outline: none;
 

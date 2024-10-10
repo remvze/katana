@@ -11,13 +11,11 @@
   & .tab {
     flex-grow: 1;
     height: 100%;
-    font-size: var(--font-sm);
+    font-size: var(--font-xsm);
     color: var(--color-foreground-subtle);
     cursor: pointer;
     background-color: transparent;
     border: none;
-    border-top: 2px solid transparent;
-    border-bottom: 3px solid transparent;
     border-radius: 8px;
     outline: none;
     transition: 0.2s;
@@ -35,8 +33,6 @@
       font-weight: 500;
       color: var(--color-foreground);
       background-color: var(--color-neutral-3);
-      border-top: 2px solid var(--color-neutral-4);
-      border-bottom: 3px solid var(--color-neutral-2);
     }
   }
 }
