@@ -167,6 +167,30 @@ export async function generateSecureKey(length: number) {
   return slug;
 }
 
+export async function generateSecurePassword(length: number) {
+  const charset =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charsetLength = charset.length;
+
+  let slug = '';
+
+  const maxValue = 256 - (256 % charsetLength);
+
+  while (slug.length < length) {
+    const randomBytes = new Uint8Array(1);
+
+    window.crypto.getRandomValues(randomBytes);
+
+    const randomValue = randomBytes[0];
+
+    if (randomValue < maxValue) {
+      slug += charset[randomValue % charsetLength];
+    }
+  }
+
+  return slug;
+}
+
 function bufferToBase64(buffer: Uint8Array) {
   let binary = '';
 

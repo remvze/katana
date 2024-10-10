@@ -1,8 +1,18 @@
 import { useEffect, useState } from 'react';
 import Turnstile, { useTurnstile } from 'react-turnstile';
-import { FaCopy, FaCheck } from 'react-icons/fa6';
+import {
+  FaCopy,
+  FaCheck,
+  FaRegEye,
+  FaRegEyeSlash,
+  FaDice,
+} from 'react-icons/fa6';
 
-import { generateSecureKey, encrypt } from '@/lib/crypto.client';
+import {
+  generateSecureKey,
+  encrypt,
+  generateSecurePassword,
+} from '@/lib/crypto.client';
 import { KEY_LENGTH } from '@/constants/url';
 import { useCopy } from '@/hooks/use-copy';
 import { config } from '@/config';
@@ -23,6 +33,7 @@ export function ShortenForm() {
 
   const [url, setUrl] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState('');
@@ -70,6 +81,13 @@ export function ShortenForm() {
     setPassword('');
   };
 
+  const generatePassword = async () => {
+    const randomPassword = await generateSecurePassword(32);
+
+    setPassword(randomPassword);
+    setShowPassword(true);
+  };
+
   return (
     <>
       {!result && (
@@ -94,14 +112,25 @@ export function ShortenForm() {
             <label htmlFor="password">
               Password <span>(optional)</span>
             </label>
-            <input
-              disabled={isLoading}
-              id="password"
-              placeholder="••••••••"
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-            />
+            <div className={styles.inputWrapper}>
+              <input
+                disabled={isLoading}
+                id="password"
+                placeholder="••••••••"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(prev => !prev)}
+              >
+                {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+              </button>
+              <button type="button" onClick={generatePassword}>
+                <FaDice />
+              </button>
+            </div>
           </div>
 
           {mountTurnstile && (
