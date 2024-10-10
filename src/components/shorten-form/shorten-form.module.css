@@ -65,6 +65,7 @@
     cursor: pointer;
     background-color: var(--color-accent-1);
     border: none;
+    border-bottom: 3px solid var(--color-neutral-11);
     border-radius: 8px;
     outline: none;
 
@@ -122,8 +123,10 @@
         font-size: var(--font-sm);
         color: var(--color-foreground-subtle);
         cursor: pointer;
-        background-color: var(--color-neutral-3);
+        background-color: var(--color-neutral-4);
         border: none;
+        border-top: 2px solid var(--color-neutral-5);
+        border-bottom: 3px solid var(--color-neutral-3);
         border-radius: 4px;
         outline: none;
       }
@@ -154,6 +157,7 @@
     cursor: pointer;
     background-color: var(--color-accent-1);
     border: none;
+    border-bottom: 3px solid var(--color-neutral-11);
     border-radius: 8px;
     outline: none;
   }
