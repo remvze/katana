@@ -2,6 +2,10 @@ import { Hono } from 'hono';
 import { z } from 'zod';
 
 import { createUrl, deleteUrl } from '@/services/url.service';
+import {
+  incrementCreatedLinks,
+  incrementDeletedLinks,
+} from '@/services/statistic.service';
 import { errorResponse, successResponse } from '@/lib/response';
 import { validator } from '@/middlewares/validator';
 import { verifyToken } from '@/lib/turnstile';
@@ -25,6 +29,8 @@ app.post('/new', validator('json', newSchema), async c => {
       !!isPasswordProtected || false,
     );
 
+    await incrementCreatedLinks();
+
     return c.json(successResponse({ destructionKey, slug }), 200);
   } else {
     return c.json(errorResponse('Verification failed.'), 400);
@@ -44,6 +50,7 @@ app.post('/delete', validator('json', deleteSchema), async c => {
   if (tokenIsValid) {
     try {
       await deleteUrl(destructionKey);
+      await incrementDeletedLinks();
 
       return c.json(successResponse(null), 200);
     } catch (error) {
