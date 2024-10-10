@@ -15,10 +15,10 @@ body {
   font-family: var(--font-sans);
   font-size: var(--font-base);
   color: var(--color-foreground);
-  background-color: var(--color-neutral-50);
+  background-color: var(--color-neutral-1);
 }
 
 ::selection {
   color: var(--color-foreground);
-  background-color: var(--color-neutral-300);
+  background-color: var(--color-neutral-3);
 }
