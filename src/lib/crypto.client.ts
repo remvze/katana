@@ -169,7 +169,7 @@ export async function generateSecureKey(length: number) {
 
 export async function generateSecurePassword(length: number) {
   const charset =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
   const charsetLength = charset.length;
 
   let slug = '';

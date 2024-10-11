@@ -81,7 +81,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 24px;
+        width: 28px;
         height: 100%;
         color: var(--color-foreground-subtler);
         cursor: pointer;

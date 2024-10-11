@@ -82,7 +82,7 @@ export function ShortenForm() {
   };
 
   const generatePassword = async () => {
-    const randomPassword = await generateSecurePassword(32);
+    const randomPassword = await generateSecurePassword(16);
 
     setPassword(randomPassword);
     setShowPassword(true);
