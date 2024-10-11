@@ -44,7 +44,7 @@ app.post('/create', validator('json', newSchema), async c => {
   await SecretModel.create({
     encryptedData,
     encryptedFile,
-    expireAt: new Date(Date.now() + expiresIn * 1000),
+    expiresAt: new Date(Date.now() + expiresIn * 1000),
     isPasswordProtected,
     publicId,
     remainingViews: viewLimit,

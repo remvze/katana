@@ -3,14 +3,14 @@ import { Container } from '../container';
 import { decrypt, decryptFile } from '@/lib/crypto.client';
 
 interface SecretViewerProps {
-  expireAt: Date;
+  expiresAt: Date;
   isPasswordProtected: boolean;
   remainingViews: number | null;
   secretId: string;
 }
 
 export function SecretViewer({
-  expireAt,
+  expiresAt,
   isPasswordProtected,
   remainingViews,
   secretId,
@@ -124,7 +124,7 @@ export function SecretViewer({
         Remaining Views:{' '}
         {remainingViews !== null ? remainingViews : 'Unlimited'}
       </p>
-      <p>Expires At: {expireAt ? expireAt.toLocaleString() : 'Unknown'}</p>
+      <p>Expires At: {expiresAt ? expiresAt.toLocaleString() : 'Unknown'}</p>
 
       <button onClick={handleView}>View</button>
     </Container>

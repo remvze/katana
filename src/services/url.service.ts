@@ -34,7 +34,7 @@ export async function createUrl(
   await urlRepository.createUrl({
     destructionKey: destructionKeyHash,
     encryptedUrl: encryptedUrl,
-    expireAt:
+    expiresAt:
       expireAfter > 0 ? new Date(Date.now() + expireAfter * 1000) : null,
     hashedSlug: hashedSlug,
     isPasswordProtected: isPasswordProtected,
