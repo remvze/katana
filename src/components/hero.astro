@@ -1,5 +1,6 @@
 ---
 import { Container } from './container';
+import { CipherText } from './cipher-text';
 
 import { generateRandomBinaryString } from '@/helpers/binary';
 
@@ -10,9 +11,9 @@ const binary = generateRandomBinaryString(1000);
   <section class="hero">
     <div class="binary">{binary}</div>
 
-    <img alt="Katana Logo" src="/logo.svg" />
+    <img alt="Katana Logo" height="36" src="/logo.svg" width="36" />
     <h1>Katana</h1>
-    <p>Short links made secure.</p>
+    <p><CipherText client:load text="Short links made secure." /></p>
   </section>
 </Container>
 
@@ -44,6 +45,7 @@ const binary = generateRandomBinaryString(1000);
     & img {
       display: block;
       width: 36px;
+      height: 36px;
       margin: 0 auto 8px;
     }
 
@@ -56,6 +58,8 @@ const binary = generateRandomBinaryString(1000);
     }
 
     & p {
+      min-height: 1.2em;
+      font-size: var(--font-sm);
       color: var(--color-foreground-subtle);
       text-align: center;
     }
