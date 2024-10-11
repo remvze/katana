@@ -6,6 +6,7 @@ export interface SecretDocument extends Document {
   createdAt: Date;
   encryptedData: string;
   expireAt: Date;
+  isPasswordProtected: boolean;
   publicId: string;
   remainingViews: number | null;
   updatedAt: Date;
@@ -15,6 +16,7 @@ const SecretSchema = new Schema<SecretDocument>(
   {
     encryptedData: { required: true, type: String },
     expireAt: { require: true, type: Date },
+    isPasswordProtected: { default: false, type: Boolean },
     publicId: { required: true, type: String, unique: true },
     remainingViews: { default: null, type: Number },
   },
