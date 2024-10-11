@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Container } from '../container';
-import { decrypt } from '@/lib/crypto.client';
+import { decrypt, decryptFile } from '@/lib/crypto.client';
 
 interface SecretViewerProps {
   expireAt: Date;
@@ -21,6 +21,9 @@ export function SecretViewer({
   const [password, setPassword] = useState('');
   const [askPassword, setAskPassword] = useState(false);
   const [decryptedNote, setDecryptedNote] = useState('');
+  const [encryptedFile, setEncryptedFile] = useState<null | string>(null);
+  const [blobUrl, setBlobUrl] = useState<null | string>(null);
+  const [metadata, setMetadata] = useState<null | { name: string }>(null);
 
   useEffect(() => {
     const key = window.location.hash.split('#')[1];
@@ -43,15 +46,9 @@ export function SecretViewer({
 
     const data = await response.json();
 
-    console.log({ data });
+    if (data.data.encryptedFile) setEncryptedFile(data.data.encryptedFile);
 
     const decryptedData = await decrypt(data.data.encryptedSecret, key);
-
-    console.log({ decryptedData });
-
-    if (data.data.encryptedFile) {
-      console.log(data.data.encryptedFile.length);
-    }
 
     setNote(decryptedData);
 
@@ -73,8 +70,39 @@ export function SecretViewer({
     }
   };
 
+  useEffect(() => {
+    if (decryptedNote) {
+      if (encryptedFile) {
+        const decrypt = async () => {
+          const decryptedFile = await decryptFile(
+            encryptedFile,
+            password ? `${key}:${password}` : key,
+          );
+
+          setBlobUrl(decryptedFile.blobUrl);
+          setMetadata(decryptedFile.metadata);
+        };
+
+        decrypt();
+      }
+    }
+  }, [decryptedNote, encryptedFile, password, key]);
+
   if (error) return <p>Error: {error}</p>;
-  if (decryptedNote) return <p>Note: {decryptedNote}</p>;
+  if (decryptedNote)
+    return (
+      <Container>
+        <p>Note: {decryptedNote}</p>
+        {blobUrl && (
+          <div>
+            <p>Attached File:</p>
+            <a download={metadata?.name} href={blobUrl}>
+              Download File
+            </a>
+          </div>
+        )}
+      </Container>
+    );
 
   if (askPassword)
     return (
