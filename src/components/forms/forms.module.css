@@ -1,4 +1,5 @@
 .tabs {
+  position: relative;
   display: flex;
   column-gap: 4px;
   align-items: center;
@@ -7,6 +8,22 @@
   margin-bottom: 20px;
   border: 1px solid var(--color-neutral-3);
   border-radius: 0;
+
+  &::after {
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    width: 80%;
+    height: 1px;
+    content: '';
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-neutral-6),
+      transparent
+    );
+    transform: translateX(-50%);
+  }
 
   & .tab {
     flex-grow: 1;
@@ -30,9 +47,26 @@
     }
 
     &.selected {
+      position: relative;
       font-weight: 500;
       color: var(--color-foreground);
       background-color: var(--color-neutral-3);
+
+      &::after {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 80%;
+        height: 1px;
+        content: '';
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--color-neutral-5),
+          transparent
+        );
+        transform: translateX(-50%);
+      }
     }
   }
 }
