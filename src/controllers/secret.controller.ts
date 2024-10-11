@@ -6,6 +6,7 @@ import { errorResponse, successResponse } from '@/lib/response';
 import { validator } from '@/middlewares/validator';
 import SecretModel, { type SecretDocument } from '@/models/secret.model';
 import { generateSecureSlug } from '@/lib/crypto.server';
+import { MAX_ENCRYPTED_FILE_SIZE } from '@/constants/file';
 
 const app = new Hono();
 
@@ -40,6 +41,14 @@ app.post('/create', validator('json', newSchema), async c => {
 
     if (!secret) publicIdExists = false;
   } while (publicIdExists);
+
+  if (encryptedFile) {
+    const encryptedFileSize = Buffer.byteLength(encryptedFile, 'utf-8');
+
+    if (encryptedFileSize > MAX_ENCRYPTED_FILE_SIZE) {
+      return c.json(errorResponse('The file is too big'), 400);
+    }
+  }
 
   await SecretModel.create({
     encryptedFile,

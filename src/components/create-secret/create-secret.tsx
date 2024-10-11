@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { Container } from '../container';
 
+import { MAX_ORIGINAL_FILE_SIZE } from '@/constants/file';
 import {
   generateSecureKey,
   encrypt,
@@ -16,6 +17,7 @@ export function CreateSecret() {
   const [viewLimit, setViewLimit] = useState<number | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [link, setLink] = useState('');
+  const [fileError, setFileError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,6 +57,22 @@ export function CreateSecret() {
     const data = await response.json();
 
     setLink(`/secrets/${data.data.id}#${key}`);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+
+    if (selectedFile) {
+      if (selectedFile.size > MAX_ORIGINAL_FILE_SIZE) {
+        setFileError(
+          `File size should not exceed ${MAX_ORIGINAL_FILE_SIZE / (1024 * 1024)} MB.`,
+        );
+        setFile(null);
+      } else {
+        setFileError('');
+        setFile(selectedFile);
+      }
+    }
   };
 
   return (
@@ -102,11 +120,10 @@ export function CreateSecret() {
         </div>
 
         <div>
-          <input
-            type="file"
-            onChange={e => setFile(e.target.files?.[0] || null)}
-          />
+          <input type="file" onChange={handleFileChange} />
         </div>
+
+        {fileError && <p>{fileError}</p>}
 
         <button type="submit">Create Secret</button>
       </form>
