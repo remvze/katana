@@ -1,23 +1,50 @@
 ---
 import { Container } from './container';
+
+import { generateRandomBinaryString } from '@/helpers/binary';
+
+const binary = generateRandomBinaryString(1000);
 ---
 
 <Container>
   <section class="hero">
+    <div class="binary">{binary}</div>
+
     <img alt="Katana Logo" src="/logo.svg" />
     <h1>Katana</h1>
-    <p>End-to-end encrypted URL shortener.</p>
+    <p>Short links made secure.</p>
   </section>
 </Container>
 
 <style>
   .hero {
-    padding: 100px 0 40px;
+    position: relative;
+    padding: 90px 0 40px;
+
+    & .binary {
+      position: absolute;
+      top: -2.3rem;
+      left: 50%;
+      z-index: -1;
+      width: calc(100% + 10px);
+      height: 200px;
+      overflow: hidden;
+      font-family: var(--font-mono);
+      line-height: 1.2;
+      color: var(--color-foreground-subtler);
+      word-break: break-all;
+      pointer-events: none;
+      cursor: default;
+      user-select: none;
+      opacity: 0.6;
+      mask-image: linear-gradient(#000, transparent);
+      transform: translateX(-50%);
+    }
 
     & img {
       display: block;
-      width: 28px;
-      margin-bottom: 8px;
+      width: 36px;
+      margin: 0 auto 8px;
     }
 
     & h1 {
@@ -25,10 +52,12 @@ import { Container } from './container';
       font-family: var(--font-display);
       font-size: var(--font-xlg);
       font-weight: 700;
+      text-align: center;
     }
 
     & p {
       color: var(--color-foreground-subtle);
+      text-align: center;
     }
   }
 </style>
