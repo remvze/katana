@@ -90,7 +90,7 @@ export async function encrypt(text: string, password: string) {
 
   return btoa(
     JSON.stringify({
-      encryptedData: bufferToBase64(new Uint8Array(encrypted)),
+      encryptedNote: bufferToBase64(new Uint8Array(encrypted)),
       iterations,
       iv: bufferToBase64(iv),
       salt: bufferToBase64(salt),
@@ -100,7 +100,7 @@ export async function encrypt(text: string, password: string) {
 
 export async function decrypt(encodedData: string, password: string) {
   const data = JSON.parse(atob(encodedData));
-  const encryptedArray = base64ToBuffer(data.encryptedData);
+  const encryptedArray = base64ToBuffer(data.encryptedNote);
   const saltArray = base64ToBuffer(data.salt);
   const ivArray = base64ToBuffer(data.iv);
   const iterations = data.iterations;

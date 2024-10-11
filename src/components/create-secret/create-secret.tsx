@@ -37,8 +37,8 @@ export function CreateSecret() {
 
     const response = await fetch('/api/secrets/create', {
       body: JSON.stringify({
-        encryptedData: encrypted,
         encryptedFile: encryptedFile ?? null,
+        encryptedNote: encrypted,
         expiresIn,
         isPasswordProtected: !!password,
         viewLimit,

@@ -48,7 +48,7 @@ export function SecretViewer({
 
     if (data.data.encryptedFile) setEncryptedFile(data.data.encryptedFile);
 
-    const decryptedData = await decrypt(data.data.encryptedSecret, key);
+    const decryptedData = await decrypt(data.data.encryptedNote, key);
 
     setNote(decryptedData);
 

@@ -4,8 +4,8 @@ import type { Document, Types } from 'mongoose';
 export interface SecretDocument extends Document {
   _id: Types.ObjectId;
   createdAt: Date;
-  encryptedData: string;
   encryptedFile: null | string;
+  encryptedNote: string;
   expiresAt: Date;
   isPasswordProtected: boolean;
   publicId: string;
@@ -15,8 +15,8 @@ export interface SecretDocument extends Document {
 
 const SecretSchema = new Schema<SecretDocument>(
   {
-    encryptedData: { required: true, type: String },
     encryptedFile: { default: null, type: String },
+    encryptedNote: { required: true, type: String },
     expiresAt: { require: true, type: Date },
     isPasswordProtected: { default: false, type: Boolean },
     publicId: { required: true, type: String, unique: true },
