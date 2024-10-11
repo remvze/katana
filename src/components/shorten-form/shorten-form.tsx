@@ -20,6 +20,7 @@ import { config } from '@/config';
 import styles from './shorten-form.module.css';
 import { cn } from '@/helpers/styles';
 import { createUrl } from '@/api/url';
+import { expirations } from '@/lib/expiration';
 
 export function ShortenForm() {
   const siteKey = config.turnstile.publicSiteKey;
@@ -33,6 +34,7 @@ export function ShortenForm() {
 
   const [url, setUrl] = useState('');
   const [password, setPassword] = useState('');
+  const [expireAfter, setExpireAfter] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -60,6 +62,7 @@ export function ShortenForm() {
 
     const response = await createUrl({
       encryptedUrl: encrypted,
+      expireAfter: expireAfter || 0,
       isPasswordProtected: !!password,
       token,
     });
@@ -131,6 +134,23 @@ export function ShortenForm() {
                 <FaDice />
               </button>
             </div>
+          </div>
+
+          <div className={styles.field}>
+            <label htmlFor="expire">Expire After</label>
+            <select
+              disabled={isLoading}
+              id="expire"
+              required
+              value={expireAfter}
+              onChange={e => setExpireAfter(Number(e.target.value))}
+            >
+              {expirations.map(item => (
+                <option key={item.label} value={item.value}>
+                  {item.label}
+                </option>
+              ))}
+            </select>
           </div>
 
           {mountTurnstile && (

@@ -12,6 +12,7 @@ import { DESTRUCTION_KEY_BYTES, SLUG_LENGTH } from '@/constants/url';
 export async function createUrl(
   encryptedUrl: string,
   isPasswordProtected: boolean = false,
+  expireAfter: number,
 ) {
   let slug;
   let slugExists = true;
@@ -33,6 +34,8 @@ export async function createUrl(
   await urlRepository.createUrl({
     destructionKey: destructionKeyHash,
     encryptedUrl: encryptedUrl,
+    expireAt:
+      expireAfter > 0 ? new Date(Date.now() + expireAfter * 1000) : null,
     hashedSlug: hashedSlug,
     isPasswordProtected: isPasswordProtected,
   });

@@ -9,17 +9,27 @@ import {
 import { errorResponse, successResponse } from '@/lib/response';
 import { validator } from '@/middlewares/validator';
 import { verifyToken } from '@/lib/turnstile';
+import { expirations } from '@/lib/expiration';
 
 const app = new Hono();
 
 const newSchema = z.object({
   encryptedUrl: z.string(),
+  expireAfter: z.number(),
   isPasswordProtected: z.boolean(),
   token: z.string(),
 });
 
 app.post('/new', validator('json', newSchema), async c => {
-  const { encryptedUrl, isPasswordProtected, token } = await c.req.json();
+  const { encryptedUrl, expireAfter, isPasswordProtected, token } =
+    await c.req.json();
+
+  const isExpirationValid = expirations.find(
+    item => item.value === expireAfter,
+  );
+
+  if (!isExpirationValid)
+    return c.json(errorResponse('Expiration date is not valid.'), 400);
 
   const tokenIsValid = await verifyToken(token);
 
@@ -27,6 +37,7 @@ app.post('/new', validator('json', newSchema), async c => {
     const { destructionKey, slug } = await createUrl(
       encryptedUrl,
       !!isPasswordProtected || false,
+      expireAfter,
     );
 
     await incrementCreatedLinks();

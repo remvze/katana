@@ -3,6 +3,7 @@ import type { APIResponse } from '@/lib/response';
 
 interface NewUrl {
   encryptedUrl: string;
+  expireAfter: number;
   isPasswordProtected: boolean;
   token: string;
 }
