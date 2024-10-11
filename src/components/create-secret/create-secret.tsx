@@ -54,7 +54,7 @@ export function CreateSecret() {
 
     const data = await response.json();
 
-    setLink(`/secret/${data.data.id}#${key}`);
+    setLink(`/secrets/${data.data.id}#${key}`);
   };
 
   return (
