@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Container } from '../container';
-import { decrypt, decryptFile } from '@/lib/crypto.client';
+import { combine, decrypt, decryptFile } from '@/lib/crypto.client';
 
 interface SecretViewerProps {
   expiresAt: Date;
@@ -76,7 +76,7 @@ export function SecretViewer({
         const decrypt = async () => {
           const decryptedFile = await decryptFile(
             encryptedFile,
-            password ? `${key}:${password}` : key,
+            password ? combine(key, password) : key,
           );
 
           setBlobUrl(decryptedFile.blobUrl);

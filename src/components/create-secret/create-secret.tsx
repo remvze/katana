@@ -2,7 +2,12 @@ import { useState } from 'react';
 
 import { Container } from '../container';
 
-import { generateSecureKey, encrypt, encryptFile } from '@/lib/crypto.client';
+import {
+  generateSecureKey,
+  encrypt,
+  encryptFile,
+  combine,
+} from '@/lib/crypto.client';
 
 export function CreateSecret() {
   const [note, setNote] = useState('');
@@ -31,7 +36,7 @@ export function CreateSecret() {
     if (file) {
       encryptedFile = await encryptFile(
         file,
-        password ? `${key}:${password}` : key,
+        password ? combine(key, password) : key,
       );
     }
 

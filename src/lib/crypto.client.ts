@@ -1,56 +1,24 @@
-function bufferToHex(buffer: ArrayBuffer) {
-  return Array.from(new Uint8Array(buffer))
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
-}
+export function combine(one: string, two: string) {
+  const encoder = new TextEncoder();
 
-async function sha256(str: string) {
-  const buffer = new TextEncoder().encode(str);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
-  const hashArray = new Uint8Array(hashBuffer);
+  const encodedOne = encoder.encode(one);
+  const encodedTwo = encoder.encode(two);
 
-  return hashArray;
-}
-
-export async function createIdentifier(key: string) {
-  const keyData = new TextEncoder().encode(key);
-
-  const baseKey = await window.crypto.subtle.importKey(
-    'raw',
-    keyData,
-    'PBKDF2',
-    false,
-    ['deriveBits'],
+  const combined = new Uint8Array(
+    encodedOne.byteLength + encodedTwo.byteLength,
   );
 
-  const salt = await sha256(key);
+  combined.set(encodedOne);
+  combined.set(encodedTwo, encodedOne.byteLength);
 
-  const iterations = 150_000;
-  const derivedBits = await window.crypto.subtle.deriveBits(
-    {
-      hash: 'SHA-256',
-      iterations,
-      name: 'PBKDF2',
-      salt,
-    },
-    baseKey,
-    256,
-  );
-
-  const identifierHash = await window.crypto.subtle.digest(
-    'SHA-256',
-    derivedBits,
-  );
-
-  const identifierHex = bufferToHex(identifierHash);
-
-  return identifierHex;
+  return combined;
 }
 
-export async function encrypt(text: string, password: string) {
+export async function encrypt(text: string, password: string | Uint8Array) {
   const encoder = new TextEncoder();
   const encodedText = encoder.encode(text);
-  const encodedPassword = encoder.encode(password);
+  const encodedPassword =
+    password instanceof Uint8Array ? password : encoder.encode(password);
 
   const salt = window.crypto.getRandomValues(new Uint8Array(16));
 
@@ -98,7 +66,10 @@ export async function encrypt(text: string, password: string) {
   );
 }
 
-export async function decrypt(encodedData: string, password: string) {
+export async function decrypt(
+  encodedData: string,
+  password: string | Uint8Array,
+) {
   const data = JSON.parse(atob(encodedData));
   const encryptedArray = base64ToBuffer(data.encryptedNote);
   const saltArray = base64ToBuffer(data.salt);
@@ -106,7 +77,8 @@ export async function decrypt(encodedData: string, password: string) {
   const iterations = data.iterations;
 
   const encoder = new TextEncoder();
-  const encodedPassword = encoder.encode(password);
+  const encodedPassword =
+    password instanceof Uint8Array ? password : encoder.encode(password);
 
   const keyMaterial = await window.crypto.subtle.importKey(
     'raw',
@@ -208,21 +180,24 @@ function base64ToBuffer(base64: string) {
   const binaryString = atob(base64);
   const len = binaryString.length;
   const bytes = new Uint8Array(len);
+
   for (let i = 0; i < len; i++) {
     bytes[i] = binaryString.charCodeAt(i);
   }
+
   return bytes;
 }
 
 /**
- * ========
- * FILE
- * ========
+ * =======================
+ * =   FILE ENCRYPTION   =
+ * =======================
  */
 
-export async function encryptFile(file: File, password: string) {
+export async function encryptFile(file: File, password: string | Uint8Array) {
   const encoder = new TextEncoder();
-  const encodedPassword = encoder.encode(password);
+  const encodedPassword =
+    password instanceof Uint8Array ? password : encoder.encode(password);
   const fileArrayBuffer = await file.arrayBuffer();
   const fileData = new Uint8Array(fileArrayBuffer);
 
@@ -281,7 +256,10 @@ export async function encryptFile(file: File, password: string) {
   );
 }
 
-export async function decryptFile(encodedData: string, password: string) {
+export async function decryptFile(
+  encodedData: string,
+  password: string | Uint8Array,
+) {
   const data = JSON.parse(atob(encodedData));
   const encryptedFile = base64ToBuffer(data.encryptedFile);
   const saltArray = base64ToBuffer(data.salt);
@@ -290,7 +268,8 @@ export async function decryptFile(encodedData: string, password: string) {
   const encryptedMetadata = data.metadata;
 
   const encoder = new TextEncoder();
-  const encodedPassword = encoder.encode(password);
+  const encodedPassword =
+    password instanceof Uint8Array ? password : encoder.encode(password);
 
   const keyMaterial = await window.crypto.subtle.importKey(
     'raw',
