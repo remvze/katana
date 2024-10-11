@@ -43,9 +43,15 @@ export function SecretViewer({
 
     const data = await response.json();
 
+    console.log({ data });
+
     const decryptedData = await decrypt(data.data.encryptedSecret, key);
 
     console.log({ decryptedData });
+
+    if (data.data.encryptedFile) {
+      console.log(data.data.encryptedFile.length);
+    }
 
     setNote(decryptedData);
 

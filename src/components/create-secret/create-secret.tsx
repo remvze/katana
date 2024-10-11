@@ -2,13 +2,14 @@ import { useState } from 'react';
 
 import { Container } from '../container';
 
-import { generateSecureKey, encrypt } from '@/lib/crypto.client';
+import { generateSecureKey, encrypt, encryptFile } from '@/lib/crypto.client';
 
 export function CreateSecret() {
   const [note, setNote] = useState('');
   const [password, setPassword] = useState('');
   const [expiresIn, setExpiresIn] = useState(60 * 60 * 24);
   const [viewLimit, setViewLimit] = useState<number | null>(null);
+  const [file, setFile] = useState<File | null>(null);
   const [link, setLink] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -25,9 +26,19 @@ export function CreateSecret() {
 
     encrypted = await encrypt(encrypted, key);
 
+    let encryptedFile = null;
+
+    if (file) {
+      encryptedFile = await encryptFile(
+        file,
+        password ? `${key}:${password}` : key,
+      );
+    }
+
     const response = await fetch('/api/secrets/create', {
       body: JSON.stringify({
         encryptedData: encrypted,
+        encryptedFile: encryptedFile ?? null,
         expiresIn,
         isPasswordProtected: !!password,
         viewLimit,
@@ -82,6 +93,13 @@ export function CreateSecret() {
             onChange={e =>
               setViewLimit(e.target.value ? Number(e.target.value) : null)
             }
+          />
+        </div>
+
+        <div>
+          <input
+            type="file"
+            onChange={e => setFile(e.target.files?.[0] || null)}
           />
         </div>
 

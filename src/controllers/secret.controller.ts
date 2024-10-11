@@ -11,6 +11,7 @@ const app = new Hono();
 
 const newSchema = z.object({
   encryptedData: z.string(),
+  encryptedFile: z.string().or(z.null()),
   expiresIn: z.number(),
   isPasswordProtected: z.boolean(),
   viewLimit: z.number().or(z.null()),
@@ -19,8 +20,13 @@ const newSchema = z.object({
 app.post('/create', validator('json', newSchema), async c => {
   await dbConnect();
 
-  const { encryptedData, expiresIn, isPasswordProtected, viewLimit } =
-    await c.req.json();
+  const {
+    encryptedData,
+    encryptedFile,
+    expiresIn,
+    isPasswordProtected,
+    viewLimit,
+  } = await c.req.json();
 
   let publicId;
   let publicIdExists = true;
@@ -37,6 +43,7 @@ app.post('/create', validator('json', newSchema), async c => {
 
   await SecretModel.create({
     encryptedData,
+    encryptedFile,
     expireAt: new Date(Date.now() + expiresIn * 1000),
     isPasswordProtected,
     publicId,
@@ -67,13 +74,19 @@ app.get('/:id/content', async c => {
     }
 
     return c.json(
-      successResponse({ encryptedSecret: secret.encryptedData }),
+      successResponse({
+        encryptedFile: secret.encryptedFile,
+        encryptedSecret: secret.encryptedData,
+      }),
       200,
     );
   }
 
   return c.json(
-    successResponse({ encryptedSecret: secret.encryptedData }),
+    successResponse({
+      encryptedFile: secret.encryptedFile,
+      encryptedSecret: secret.encryptedData,
+    }),
     200,
   );
 });
