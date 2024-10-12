@@ -26,7 +26,7 @@ services:
     ports:
       - 127.0.0.1:4322:4321
 
-x-app-common: &katana-app-common
+app-common: &katana-app-common
   build: .
   restart: always
   environment:
