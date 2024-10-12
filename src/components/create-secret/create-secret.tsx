@@ -9,11 +9,12 @@ import {
   encryptFile,
   combine,
 } from '@/lib/crypto.client';
+import { secretExpirations } from '@/lib/expiration';
 
 export function CreateSecret() {
   const [note, setNote] = useState('');
   const [password, setPassword] = useState('');
-  const [expiresIn, setExpiresIn] = useState(60 * 60 * 24);
+  const [expiresIn, setExpiresIn] = useState(60 * 60 * 2);
   const [viewLimit, setViewLimit] = useState<number | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [link, setLink] = useState('');
@@ -102,8 +103,11 @@ export function CreateSecret() {
             value={expiresIn}
             onChange={e => setExpiresIn(Number(e.target.value))}
           >
-            <option value={60 * 60 * 24}>1 Day</option>
-            <option value={60 * 60 * 24 * 2}>2 Days</option>
+            {secretExpirations.map(expiration => (
+              <option key={expiration.label} value={expiration.value}>
+                {expiration.label}
+              </option>
+            ))}
           </select>
         </div>
 

@@ -7,6 +7,7 @@ import { validator } from '@/middlewares/validator';
 import SecretModel, { type SecretDocument } from '@/models/secret.model';
 import { generateSecureSlug, sha256 } from '@/lib/crypto.server';
 import { MAX_ENCRYPTED_FILE_SIZE } from '@/constants/file';
+import { secretExpirations } from '@/lib/expiration';
 
 const app = new Hono();
 
@@ -28,6 +29,13 @@ app.post('/create', validator('json', newSchema), async c => {
     isPasswordProtected,
     viewLimit,
   } = await c.req.json();
+
+  const isExpirationValid = secretExpirations.find(
+    item => item.value === expiresIn,
+  );
+
+  if (!isExpirationValid)
+    return c.json(errorResponse('Expiration date is not valid.'), 400);
 
   let publicId;
   let hashedPublicId;
