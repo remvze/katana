@@ -1,22 +1,3 @@
-x-app-config: &app-config
-  image: ghcr.io/remvze/katana
-  restart: always
-  environment:
-    PUBLIC_TURNSTILE_SITE_KEY: ${PUBLIC_TURNSTILE_SITE_KEY}
-    TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY}
-    PUBLIC_UNSHORTENER_LINK: ${PUBLIC_UNSHORTENER_LINK}
-    MONGODB_URI: ${MONGODB_URI}
-    HOST: 0.0.0.0
-  env_file:
-    - .env
-  depends_on:
-    - mongodb
-  networks:
-    - katana-network
-  labels:
-    - 'com.centurylinklabs.watchtower.enable=true'
-  command: sh -c "npm run migrate:up && npm run start"
-
 services:
   mongodb:
     image: mongo:latest
@@ -30,32 +11,41 @@ services:
       - katana-network
     restart: unless-stopped
 
-  katana-one:
-    <<: *app-config
-    container_name: katana-app-one
-
-  katana-two:
-    <<: *app-config
-    container_name: katana-app-two
-
-  katana-three:
-    <<: *app-config
-    container_name: katana-app-three
+  katana:
+    image: ghcr.io/remvze/katana
+    restart: always
+    deploy:
+      replicas: 3
+    environment:
+      PUBLIC_TURNSTILE_SITE_KEY: ${PUBLIC_TURNSTILE_SITE_KEY}
+      TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY}
+      PUBLIC_UNSHORTENER_LINK: ${PUBLIC_UNSHORTENER_LINK}
+      MONGODB_URI: ${MONGODB_URI}
+      HOST: 0.0.0.0
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+    networks:
+      - katana-network
+    labels:
+      - 'com.centurylinklabs.watchtower.enable=true'
+    command: sh -c "npm run migrate:up && npm run start"
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://127.0.0.1:4321/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
   caddy:
     image: caddy:latest
     container_name: caddy
     restart: unless-stopped
     ports:
-      - 3000:3000
+      - 127.0.0.1:3000:3000
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
-      - caddy_data:/data
-      - caddy_config:/config
-    depends_on:
-      - katana-one
-      - katana-two
-      - katana-three
     networks:
       - katana-network
 
@@ -70,7 +60,3 @@ services:
 networks:
   katana-network:
     driver: bridge
-
-volumes:
-  caddy_data:
-  caddy_config:

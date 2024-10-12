@@ -1,8 +1,5 @@
 :3000 {
-  reverse_proxy {
-    to katana-app-one:4321 katana-app-two:4321 katana-app-three:4321
-
+  reverse_proxy katana:4321 {
     lb_policy round_robin
-    lb_retries 2
   }
 }
