@@ -1,4 +1,4 @@
-domain {
+:8080 {
   reverse_proxy {
     to katana-app-one:4321 katana-app-two:4321 katana-app-three:4321
 

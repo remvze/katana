@@ -36,27 +36,26 @@ services:
     <<: *app-config
     container_name: katana-app-one
     ports:
-      - 127.0.0.1:4321:4321
+      - 4321
 
   katana-two:
     <<: *app-config
     container_name: katana-app-two
     ports:
-      - 127.0.0.1:4322:4321
+      - 4321
 
   katana-three:
     <<: *app-config
     container_name: katana-app-three
     ports:
-      - 127.0.0.1:4323:4321
+      - 4321
 
   caddy:
     image: caddy:latest
     container_name: caddy
     restart: unless-stopped
     ports:
-      - 80:80
-      - 443:443
+      - 8080:8080
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
