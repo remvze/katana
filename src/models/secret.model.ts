@@ -7,8 +7,8 @@ export interface SecretDocument extends Document {
   encryptedFile: null | string;
   encryptedNote: string;
   expiresAt: Date;
+  hashedPublicId: string;
   isPasswordProtected: boolean;
-  publicId: string;
   remainingViews: number | null;
   updatedAt: Date;
 }
@@ -18,14 +18,14 @@ const SecretSchema = new Schema<SecretDocument>(
     encryptedFile: { default: null, type: String },
     encryptedNote: { required: true, type: String },
     expiresAt: { require: true, type: Date },
+    hashedPublicId: { required: true, type: String, unique: true },
     isPasswordProtected: { default: false, type: Boolean },
-    publicId: { required: true, type: String, unique: true },
     remainingViews: { default: null, type: Number },
   },
   { timestamps: true },
 );
 
-SecretSchema.index({ publicId: 1 });
+SecretSchema.index({ hashedPublicId: 1 });
 SecretSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 export default mongoose.models.Secret ||

@@ -5,7 +5,7 @@ import { dbConnect } from '@/database/mongo';
 import { errorResponse, successResponse } from '@/lib/response';
 import { validator } from '@/middlewares/validator';
 import SecretModel, { type SecretDocument } from '@/models/secret.model';
-import { generateSecureSlug } from '@/lib/crypto.server';
+import { generateSecureSlug, sha256 } from '@/lib/crypto.server';
 import { MAX_ENCRYPTED_FILE_SIZE } from '@/constants/file';
 
 const app = new Hono();
@@ -30,13 +30,15 @@ app.post('/create', validator('json', newSchema), async c => {
   } = await c.req.json();
 
   let publicId;
+  let hashedPublicId;
   let publicIdExists = true;
 
   do {
     publicId = await generateSecureSlug(24);
+    hashedPublicId = sha256(publicId);
 
     const secret = await SecretModel.findOne({
-      publicId,
+      hashedPublicId,
     }).lean<SecretDocument>();
 
     if (!secret) publicIdExists = false;
@@ -54,21 +56,22 @@ app.post('/create', validator('json', newSchema), async c => {
     encryptedFile,
     encryptedNote,
     expiresAt: new Date(Date.now() + expiresIn * 1000),
+    hashedPublicId,
     isPasswordProtected,
-    publicId,
     remainingViews: viewLimit,
   });
 
-  return c.json(successResponse({ id: publicId }), 200);
+  return c.json(successResponse({ publicId }), 200);
 });
 
 app.get('/:id/content', async c => {
   await dbConnect();
 
   const id = c.req.param('id');
+  const hashedPublicId = sha256(id);
 
   const secret = await SecretModel.findOne({
-    publicId: id,
+    hashedPublicId,
   });
 
   if (!secret) return c.json(errorResponse('Secret does not exist'), 404);

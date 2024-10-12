@@ -56,7 +56,7 @@ export function CreateSecret() {
 
     const data = await response.json();
 
-    setLink(`/secrets/${data.data.id}#${key}`);
+    setLink(`/secrets/${data.data.publicId}#${key}`);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

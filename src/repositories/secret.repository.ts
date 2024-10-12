@@ -5,11 +5,11 @@ import type { SecretDocument } from '@/models/secret.model';
 import SecretModel from '@/models/secret.model';
 
 class SecretRepository {
-  async getSecretByPublicId(publicId: string) {
+  async getSecretByPublicId(hashedPublicId: string) {
     await dbConnect();
 
     const document = await SecretModel.findOne({
-      publicId,
+      hashedPublicId,
     }).lean<SecretDocument>();
 
     return document ? normalizeId(document) : null;
