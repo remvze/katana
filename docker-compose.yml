@@ -12,18 +12,6 @@ services:
     ports:
       - 27017
 
-  katana-one:
-    <<: *app-config
-    container_name: katana-app-one
-    ports:
-      - 127.0.0.1:4321:4321
-
-  katana-two:
-    <<: *app-config
-    container_name: katana-app-two
-    ports:
-      - 127.0.0.1:4322:4321
-
   app-config: &app-config
     build: .
     restart: always
@@ -40,6 +28,18 @@ services:
     networks:
       - katana-network
     command: sh -c "npm run migrate:up && npm run start"
+
+  katana-one:
+    <<: *app-config
+    container_name: katana-app-one
+    ports:
+      - 127.0.0.1:4321:4321
+
+  katana-two:
+    <<: *app-config
+    container_name: katana-app-two
+    ports:
+      - 127.0.0.1:4322:4321
 
 networks:
   katana-network:
