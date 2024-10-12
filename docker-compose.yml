@@ -24,8 +24,7 @@ services:
     env_file:
       - .env
     depends_on:
-      mongodb:
-        condition: service_healthy
+      - mongodb
     networks:
       - katana-network
     command: sh -c "npm run migrate:up && npm run start"
