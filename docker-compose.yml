@@ -1,9 +1,33 @@
 services:
-  timesy:
-    image: ghcr.io/remvze/katana
+  mongodb:
+    image: mongo:latest
+    volumes:
+      - ./data/db:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    env_file:
+      - .env
+    networks:
+      - backend
+
+  katana:
+    build:
+      context: .
+      dockerfile: Dockerfile
     logging:
       options:
         max-size: 1g
     restart: always
     ports:
-      - '8080:8080'
+      - '4321:4321'
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge

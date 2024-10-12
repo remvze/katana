@@ -1,12 +1,13 @@
-FROM docker.io/node:20-alpine3.18 AS build
+FROM node:lts AS runtime
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
+
 COPY . .
+
+RUN npm install
 RUN npm run build
 
-FROM docker.io/caddy:latest
-COPY ./Caddyfile /etc/caddy/Caddyfile
-COPY --from=build /app/dist /var/www/html
+ENV HOST=0.0.0.0
+ENV PORT=4321
+EXPOSE 4321
 
-EXPOSE 8080
+CMD npm run migrate:up && npm run start
