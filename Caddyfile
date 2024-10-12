@@ -1,6 +1,6 @@
 domain {
   reverse_proxy {
-    to localhost:4321 localhost:4322 localhost:4323
+    to katana-app-one:4321 katana-app-two:4321 katana-app-three:4321
 
     lb_policy round_robin
     lb_retries 2
