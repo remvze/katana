@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3](https://github.com/remvze/katana/compare/v0.0.2...v0.0.3) (2024-10-12)
+
+
+### ✨ Features
+
+* add watchtower ([9fb1bfd](https://github.com/remvze/katana/commit/9fb1bfd50aec8d03d21224e31302d82fde14c319))
+
+
+### 🚚 Chores
+
+* test watchtower ([0b4ca55](https://github.com/remvze/katana/commit/0b4ca55d949ffbdaf6208911ebc9ab946a9ed679))
+
 ### 0.0.2 (2024-10-12)
 
 
