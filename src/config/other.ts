@@ -1,6 +1,4 @@
-import { getEnvSource } from './env';
-
-const env = getEnvSource();
+import { env } from 'std-env';
 
 export const otherConfig = {
   publicUnshortenLink: env.PUBLIC_UNSHORTENER_LINK,

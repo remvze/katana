@@ -1,6 +1,4 @@
-import { getEnvSource } from './env';
-
-const env = getEnvSource();
+import { env } from 'std-env';
 
 export const turnstileConfig = {
   publicSiteKey: env.PUBLIC_TURNSTILE_SITE_KEY,
