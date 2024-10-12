@@ -1,6 +1,7 @@
-import { env } from 'std-env';
-
 export const turnstileConfig = {
-  publicSiteKey: env.PUBLIC_TURNSTILE_SITE_KEY,
-  secretKey: env.TURNSTILE_SECRET_KEY,
+  publicSiteKey:
+    import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ??
+    process.env.PUBLIC_TURNSTILE_SITE_KEY,
+  secretKey:
+    import.meta.env.TURNSTILE_SECRET_KEY ?? process.env.TURNSTILE_SECRET_KEY,
 };

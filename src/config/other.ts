@@ -1,5 +1,5 @@
-import { env } from 'std-env';
-
 export const otherConfig = {
-  publicUnshortenLink: env.PUBLIC_UNSHORTENER_LINK,
+  publicUnshortenLink:
+    import.meta.env.PUBLIC_UNSHORTENER_LINK ??
+    process.env.PUBLIC_UNSHORTENER_LINK,
 };

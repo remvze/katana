@@ -1,5 +1,3 @@
-import { env } from 'std-env';
-
 export const mongodbConfig = {
-  uri: env.MONGODB_URI,
+  uri: import.meta.env.MONGODB_URI ?? process.env.MONGODB_URI,
 };
