@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mongodb:
     image: mongo:latest
@@ -15,33 +13,34 @@ services:
       - 27017
 
   katana-one:
-    <<: *katana-app-common
+    <<: *app-template
     container_name: katana-app-one
     ports:
       - 127.0.0.1:4321:4321
 
   katana-two:
-    <<: *katana-app-common
+    <<: *app-template
     container_name: katana-app-two
     ports:
       - 127.0.0.1:4322:4321
 
-app-common: &katana-app-common
-  build: .
-  restart: always
-  environment:
-    - PUBLIC_TURNSTILE_SITE_KEY=${PUBLIC_TURNSTILE_SITE_KEY}
-    - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
-    - PUBLIC_UNSHORTENER_LINK=${PUBLIC_UNSHORTENER_LINK}
-    - MONGODB_URI=${MONGODB_URI}
-    - HOST=0.0.0.0
-  env_file:
-    - .env
-  depends_on:
-    - mongodb
-  networks:
-    - katana-network
-  command: sh -c "npm run migrate:up && npm run start"
+x-templates:
+  app-template: &app-template
+    build: .
+    restart: always
+    environment:
+      - PUBLIC_TURNSTILE_SITE_KEY=${PUBLIC_TURNSTILE_SITE_KEY}
+      - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
+      - PUBLIC_UNSHORTENER_LINK=${PUBLIC_UNSHORTENER_LINK}
+      - MONGODB_URI=${MONGODB_URI}
+      - HOST=0.0.0.0
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+    networks:
+      - katana-network
+    command: sh -c "npm run migrate:up && npm run start"
 
 networks:
   katana-network:
