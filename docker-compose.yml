@@ -11,24 +11,6 @@ services:
       - katana-network
     ports:
       - 27017
-    healthcheck:
-      test:
-        [
-          'CMD',
-          'mongo',
-          '-u',
-          '${MONGODB_USERNAME}',
-          '-p',
-          '${MONGODB_Password}',
-          '--authenticationDatabase',
-          'admin',
-          '--eval',
-          "db.runCommand('ping').ok",
-        ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
 
   app-config: &app-config
     build: .
