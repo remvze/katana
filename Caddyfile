@@ -1,3 +1,11 @@
 domain {
-  reverse_proxy localhost:4321 localhost:4322
+  reverse_proxy localhost:4321 localhost:4322 localhost:4323 {
+    health_checks {
+      path /api/health
+      interval 5s
+      timeout 2s
+      healthy_threshold 1
+      unhealthy_threshold 1
+    }
+  }
 }

@@ -9,4 +9,6 @@ const app = new Hono().basePath('/api/');
 app.route('/urls', urlController);
 app.route('/secrets', secretController);
 
+app.get('/health', c => c.json({ success: true }, 200));
+
 export const ALL: APIRoute = context => app.fetch(context.request);

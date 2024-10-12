@@ -44,6 +44,12 @@ services:
     ports:
       - 127.0.0.1:4322:4321
 
+  katana-three:
+    <<: *app-config
+    container_name: katana-app-three
+    ports:
+      - 127.0.0.1:4323:4321
+
   watchtower:
     image: containrrr/watchtower
     container_name: watchtower
