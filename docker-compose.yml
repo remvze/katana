@@ -1,5 +1,5 @@
 x-app-config: &app-config
-  build: .
+  image: ghcr.io/remvze/katana
   restart: always
   environment:
     PUBLIC_TURNSTILE_SITE_KEY: ${PUBLIC_TURNSTILE_SITE_KEY}
@@ -13,6 +13,8 @@ x-app-config: &app-config
     - mongodb
   networks:
     - katana-network
+  labels:
+    - 'com.centurylinklabs.watchtower.enable=true'
   command: sh -c "npm run migrate:up && npm run start"
 
 services:
@@ -28,6 +30,7 @@ services:
       - katana-network
     ports:
       - 27017
+    restart: unless-stopped
 
   katana-one:
     <<: *app-config
@@ -40,6 +43,14 @@ services:
     container_name: katana-app-two
     ports:
       - 127.0.0.1:4322:4321
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --cleanup --interval 60 --label-enable
+    restart: unless-stopped
 
 networks:
   katana-network:
