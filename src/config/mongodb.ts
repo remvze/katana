@@ -1,3 +1,7 @@
+import { getEnvSource } from './env';
+
+const env = getEnvSource();
+
 export const mongodbConfig = {
-  uri: import.meta.env.MONGODB_URI,
+  uri: env.MONGODB_URI,
 };

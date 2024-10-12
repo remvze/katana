@@ -1,3 +1,7 @@
+import { getEnvSource } from './env';
+
+const env = getEnvSource();
+
 export const otherConfig = {
-  publicUnshortenLink: import.meta.env.PUBLIC_UNSHORTENER_LINK,
+  publicUnshortenLink: env.PUBLIC_UNSHORTENER_LINK,
 };
