@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/remvze/katana/compare/v0.0.4...v0.0.5) (2024-10-12)
+
+
+### ✨ Features
+
+* add caddy ([f76a1bd](https://github.com/remvze/katana/commit/f76a1bd85812aa0091842803440cc2a24394b68d))
+
+
+### 🐛 Bug Fixes
+
+* change caddy ip ([4bf9e26](https://github.com/remvze/katana/commit/4bf9e267a5968ebd2276e4636979d46404244a1d))
+* wip ([0981ff3](https://github.com/remvze/katana/commit/0981ff342635dde30dc488c46e5acab3611abcb6))
+* wip ([f02fb73](https://github.com/remvze/katana/commit/f02fb73a6b03e7e5f3d199591db321bf1c73509c))
+
+
+### 🚚 Chores
+
+* test watchtower ([6fd5939](https://github.com/remvze/katana/commit/6fd59396ed08d75ad0390fa58ccd6891dc80a214))
+
 ### [0.0.4](https://github.com/remvze/katana/compare/v0.0.3...v0.0.4) (2024-10-12)
 
 
