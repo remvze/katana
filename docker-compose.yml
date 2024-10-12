@@ -30,7 +30,7 @@ services:
       - mongodb
     networks:
       - katana-network
-    command: npm run migrate:up && npm run start
+    command: sh -c "npm run migrate:up && npm run start"
 
 networks:
   katana-network:
