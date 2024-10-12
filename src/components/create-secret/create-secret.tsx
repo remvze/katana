@@ -134,7 +134,7 @@ export function CreateSecret() {
 
       {link && <p>{link}</p>}
 
-      <h1>Watchtower is working!!!!!!!</h1>
+      <h1>Finally!!!!</h1>
     </Container>
   );
 }
