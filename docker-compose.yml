@@ -1,31 +1,33 @@
 services:
   mongodb:
     image: mongo:latest
+    container_name: katana-mongodb
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
     env_file:
       - .env
     networks:
-      - backend
+      - katana-network
 
   katana:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    logging:
-      options:
-        max-size: 1g
+    build: .
+    container_name: katana-app
     restart: always
     ports:
-      - '4321:4321'
+      - 127.0.0.1:4321:4321
+    environment:
+      - PUBLIC_TURNSTILE_SITE_KEY=${PUBLIC_TURNSTILE_SITE_KEY}
+      - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
+      - PUBLIC_UNSHORTENER_LINK=${PUBLIC_UNSHORTENER_LINK}
+      - MONGODB_URI=${MONGODB_URI}
     env_file:
       - .env
     depends_on:
       - mongodb
     networks:
-      - backend
+      - katana-network
 
 networks:
-  backend:
+  katana-network:
     driver: bridge
