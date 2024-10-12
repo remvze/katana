@@ -133,8 +133,6 @@ export function CreateSecret() {
       </form>
 
       {link && <p>{link}</p>}
-
-      <h1>Finally!!!!</h1>
     </Container>
   );
 }
