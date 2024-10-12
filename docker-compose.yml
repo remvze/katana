@@ -14,7 +14,6 @@ services:
 
   katana:
     build: .
-    container_name: katana-app
     restart: always
     deploy:
       replicas: 2
