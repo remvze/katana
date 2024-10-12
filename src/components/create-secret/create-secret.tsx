@@ -133,6 +133,8 @@ export function CreateSecret() {
       </form>
 
       {link && <p>{link}</p>}
+
+      <h1>Watchtower is working!</h1>
     </Container>
   );
 }
