@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.11](https://github.com/remvze/katana/compare/v0.0.10...v0.0.11) (2024-10-12)
+
+
+### ♻️ Code Refactoring
+
+* better env handling ([7568511](https://github.com/remvze/katana/commit/756851109908477d7ff8764f03e6d828471c0ef6))
+
 ### [0.0.10](https://github.com/remvze/katana/compare/v0.0.9...v0.0.10) (2024-10-12)
 
 
