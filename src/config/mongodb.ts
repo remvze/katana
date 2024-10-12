@@ -1,3 +1,5 @@
+import { getEnv } from './getter';
+
 export const mongodbConfig = {
-  uri: import.meta.env.MONGODB_URI ?? process.env.MONGODB_URI,
+  uri: getEnv('MONGODB_URI'),
 };
