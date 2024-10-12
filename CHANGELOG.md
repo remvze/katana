@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.9](https://github.com/remvze/katana/compare/v0.0.8...v0.0.9) (2024-10-12)
+
+
+### 🚚 Chores
+
+* remove healthchecks ([2af7c7b](https://github.com/remvze/katana/commit/2af7c7b05978b8d79bd791b647a4b129c593f4dc))
+
+
+### 🐛 Bug Fixes
+
+* add std-env ([2292a09](https://github.com/remvze/katana/commit/2292a09fd349984ecf7bde4d1866d1fe2f430d9f))
+
 ### [0.0.8](https://github.com/remvze/katana/compare/v0.0.7...v0.0.8) (2024-10-12)
 
 
