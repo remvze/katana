@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/remvze/katana/compare/v0.0.3...v0.0.4) (2024-10-12)
+
+
+### 🚚 Chores
+
+* add health route ([085d4a5](https://github.com/remvze/katana/commit/085d4a57e8a3d9cec59a053973965b743dd147cc))
+* better reverse proxy ([94fa291](https://github.com/remvze/katana/commit/94fa29113ef2a33c92108aacbbcff0b0965455da))
+* test watchtower ([dfc3df3](https://github.com/remvze/katana/commit/dfc3df3a0e57ade94f112aad98d666599ff4140e))
+
 ### [0.0.3](https://github.com/remvze/katana/compare/v0.0.2...v0.0.3) (2024-10-12)
 
 
