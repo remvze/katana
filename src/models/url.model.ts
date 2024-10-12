@@ -25,7 +25,7 @@ const UrlSchema = new Schema<UrlDocument>(
   { timestamps: true },
 );
 
-UrlSchema.index({ hashedSlug: 1 });
+UrlSchema.index({ hashedSlug: 1 }, { unique: true });
 UrlSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 export default mongoose.models.Url ||

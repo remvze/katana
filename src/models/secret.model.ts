@@ -25,7 +25,7 @@ const SecretSchema = new Schema<SecretDocument>(
   { timestamps: true },
 );
 
-SecretSchema.index({ hashedPublicId: 1 });
+SecretSchema.index({ hashedPublicId: 1 }, { unique: true });
 SecretSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 export default mongoose.models.Secret ||
