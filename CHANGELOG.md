@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/remvze/katana/compare/v0.0.5...v0.0.6) (2024-10-12)
+
+
+### 🚚 Chores
+
+* wip ([50a9219](https://github.com/remvze/katana/commit/50a921901638eb3d626fdfb03f37a23b222958b5))
+
+
+### 🐛 Bug Fixes
+
+* wip ([0b456aa](https://github.com/remvze/katana/commit/0b456aa9d5e1b4b47fdc79e55511fed3973a7baa))
+* wip ([00f9cd7](https://github.com/remvze/katana/commit/00f9cd74d8acb584705d08191a698f0b3294b7ef))
+
 ### [0.0.5](https://github.com/remvze/katana/compare/v0.0.4...v0.0.5) (2024-10-12)
 
 
