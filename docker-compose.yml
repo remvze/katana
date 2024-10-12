@@ -11,6 +11,12 @@ services:
       - katana-network
     ports:
       - 27017
+    healthcheck:
+      test: ['CMD', 'mongo', '--eval', "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 5s
 
   app-config: &app-config
     build: .
@@ -28,6 +34,12 @@ services:
     networks:
       - katana-network
     command: sh -c "npm run migrate:up && npm run start"
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:4321/']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
 
   katana-one:
     <<: *app-config
@@ -40,6 +52,8 @@ services:
     container_name: katana-app-two
     ports:
       - 127.0.0.1:4322:4321
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:4322/']
 
 networks:
   katana-network:
