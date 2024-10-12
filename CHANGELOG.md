@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.8](https://github.com/remvze/katana/compare/v0.0.7...v0.0.8) (2024-10-12)
+
+
+### 🐛 Bug Fixes
+
+* add variable source ([a4e75ab](https://github.com/remvze/katana/commit/a4e75ab505c5223fed50e07f73677adf096245b2))
+
 ### [0.0.7](https://github.com/remvze/katana/compare/v0.0.6...v0.0.7) (2024-10-12)
 
 
