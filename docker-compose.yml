@@ -54,8 +54,10 @@ services:
     container_name: watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command: --cleanup --interval 60 --label-enable
+    command: --cleanup --interval 30 --label-enable --rolling-restart
     restart: unless-stopped
+    networks:
+      - katana-network
 
 networks:
   katana-network:
