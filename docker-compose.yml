@@ -12,11 +12,23 @@ services:
     ports:
       - 27017
     healthcheck:
-      test: ['CMD', 'mongo', '--eval', "db.adminCommand('ping')"]
+      test:
+        [
+          'CMD',
+          'mongo',
+          '--username',
+          '${MONGODB_USERNAME}',
+          '--password',
+          '${MONGODB_PASSWORD}',
+          '--authenticationDatabase',
+          'admin',
+          '--eval',
+          "db.adminCommand('ping')",
+        ]
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 5s
+      start_period: 30s
 
   app-config: &app-config
     build: .
