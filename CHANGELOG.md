@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.10](https://github.com/remvze/katana/compare/v0.0.9...v0.0.10) (2024-10-12)
+
+
+### 🐛 Bug Fixes
+
+* add process.env ([cde85bf](https://github.com/remvze/katana/commit/cde85bf929d2f086cae9ee157744c67a51be2351))
+
 ### [0.0.9](https://github.com/remvze/katana/compare/v0.0.8...v0.0.9) (2024-10-12)
 
 
