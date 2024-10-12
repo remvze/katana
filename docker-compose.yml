@@ -13,19 +13,18 @@ services:
       - 27017
 
   katana-one:
-    <<: *app-template
+    <<: *app-config
     container_name: katana-app-one
     ports:
       - 127.0.0.1:4321:4321
 
   katana-two:
-    <<: *app-template
+    <<: *app-config
     container_name: katana-app-two
     ports:
       - 127.0.0.1:4322:4321
 
-x-templates:
-  app-template: &app-template
+  app-config: &app-config
     build: .
     restart: always
     environment:
