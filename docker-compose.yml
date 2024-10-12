@@ -1,3 +1,5 @@
+version: '3'
+
 services:
   mongodb:
     image: mongo:latest
@@ -16,8 +18,13 @@ services:
     build: .
     container_name: katana-app
     restart: always
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
     ports:
       - 127.0.0.1:4321:4321
+      - 127.0.0.1:4322:4321
     environment:
       - PUBLIC_TURNSTILE_SITE_KEY=${PUBLIC_TURNSTILE_SITE_KEY}
       - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
