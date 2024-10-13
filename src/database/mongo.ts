@@ -6,7 +6,7 @@ declare global {
   var mongoose: any; // eslint-disable-line
 }
 
-const MONGODB_URI = config.mongodb.uri;
+const MONGODB_URI = config.mongodb.uri();
 
 if (!MONGODB_URI) {
   throw new Error(

@@ -7,7 +7,7 @@ import { deleteUrl } from '@/api/url';
 import { config } from '@/config';
 
 export function DeleteUrl() {
-  const siteKey = config.turnstile.publicSiteKey;
+  const siteKey = config.turnstile.publicSiteKey();
 
   const turnstile = useTurnstile();
 
