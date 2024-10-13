@@ -31,6 +31,12 @@ services:
     labels:
       - 'com.centurylinklabs.watchtower.enable=true'
     command: sh -c "npm run migrate:up && npm run start"
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:4321']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
   caddy:
     image: caddy:latest
@@ -40,8 +46,16 @@ services:
       - 127.0.0.1:3000:3000
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
+    depends_on:
+      - katana
     networks:
       - katana-network
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
   watchtower:
     image: containrrr/watchtower
