@@ -33,6 +33,9 @@ export function Forms() {
         >
           Delete URL
         </button>
+        <a className={styles.tab} href="/secret">
+          Share Secret
+        </a>
       </div>
 
       {selectedTab === 'shorten' && <ShortenForm />}

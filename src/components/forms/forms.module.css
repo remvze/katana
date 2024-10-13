@@ -26,10 +26,14 @@
   }
 
   & .tab {
-    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% / 3);
     height: 100%;
     font-size: var(--font-xsm);
     color: var(--color-foreground-subtle);
+    text-decoration: none;
     cursor: pointer;
     background-color: transparent;
     border: none;
