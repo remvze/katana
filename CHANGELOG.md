@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.15](https://github.com/remvze/katana/compare/v0.0.14...v0.0.15) (2024-10-14)
+
+
+### ✨ Features
+
+* add services tab ([f845124](https://github.com/remvze/katana/commit/f845124ddb8967927cafc6dea171a5924e5f90b5))
+
 ### [0.0.14](https://github.com/remvze/katana/compare/v0.0.13...v0.0.14) (2024-10-13)
 
 
