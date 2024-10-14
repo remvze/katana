@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.16](https://github.com/remvze/katana/compare/v0.0.15...v0.0.16) (2024-10-14)
+
+
+### 🚚 Chores
+
+* change logo colors ([e6431e2](https://github.com/remvze/katana/commit/e6431e274ea9f938f367f93f5cc3d38faef00f8e))
+
+
+### 💄 Styling
+
+* minor change ([0ef41d7](https://github.com/remvze/katana/commit/0ef41d7cea34cb6d536bd39af860f9fcfe32e484))
+
 ### [0.0.15](https://github.com/remvze/katana/compare/v0.0.14...v0.0.15) (2024-10-14)
 
 
