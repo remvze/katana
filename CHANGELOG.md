@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.17](https://github.com/remvze/katana/compare/v0.0.16...v0.0.17) (2024-10-18)
+
+
+### ✨ Features
+
+* improve the hero ([598ab16](https://github.com/remvze/katana/commit/598ab16277aa8586e85195ac4972b4d6afe57f69))
+
 ### [0.0.16](https://github.com/remvze/katana/compare/v0.0.15...v0.0.16) (2024-10-14)
 
 
