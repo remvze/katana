@@ -58,6 +58,9 @@ export async function getUrl(slug: string) {
       clicks: url.clicks + 1,
     });
 
+    console.log('get', url?.isPasswordProtected);
+    console.log('get-updated', updatedUrl?.isPasswordProtected);
+
     return updatedUrl;
   }
 
