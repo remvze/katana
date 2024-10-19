@@ -17,12 +17,13 @@ export async function createUrl(
 ) {
   let slug;
   let slugExists = true;
-
+  console.log('Hello Five');
   do {
     slug = await generateSecureSlug(SLUG_LENGTH);
     const hashedSlug = sha256(slug);
 
     const shortUrl = await urlRepository.getUrl(hashedSlug);
+    console.log('Hello six');
 
     if (!shortUrl) slugExists = false;
   } while (slugExists);
@@ -31,7 +32,7 @@ export async function createUrl(
 
   const destructionKey = generateSecureKey(DESTRUCTION_KEY_BYTES);
   const destructionKeyHash = await hash(destructionKey, 12);
-
+  console.log('Hello Seven');
   await urlRepository.createUrl(
     new UrlModel(
       hashedSlug,
@@ -43,6 +44,8 @@ export async function createUrl(
       expireAfter ? expireAfter : null,
     ),
   );
+
+  console.log('Hello Eight');
 
   return { destructionKey: `${slug}:${destructionKey}`, slug };
 }
