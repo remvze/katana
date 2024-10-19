@@ -1,52 +1,24 @@
-import { createRedisClient } from '@/database/redis';
+import { storage } from '@/database/redis';
 import { UrlModel } from '@/models/url.model';
 import type { Url } from '@/models/url.model';
 
 class UrlRepository {
-  private client = createRedisClient();
-
   async createUrl(urlData: UrlModel) {
     const key = `url:${urlData.hashedSlug}`;
     const exists = await this.getUrl(urlData.hashedSlug);
 
     if (exists) throw new Error('URL already exists');
 
-    await this.client.hset(key, urlData.toJSON());
-
-    if (urlData.expireAfter) {
-      await this.client.expire(key, Number(urlData.expireAfter));
-    }
+    await storage.setItem(key, urlData.toJSON(), {
+      ttl: urlData.expireAfter ?? null,
+    });
   }
 
   async getUrl(hashedSlug: string) {
     const key = `url:${hashedSlug}`;
-    const url = await this.client.hgetall(key);
+    const url = await storage.getItem<Url>(key);
 
-    const urlObject = url
-      ? Object.keys(url).length > 0
-        ? UrlModel.fromJSON(url as unknown as Url)
-        : null
-      : null;
-
-    if (url) {
-      url.isPasswordProtected = JSON.parse(url.isPasswordProtected as string);
-    }
-
-    if (urlObject && urlObject.expireAfter) {
-      const ttl = await this.client.ttl(key);
-
-      if (
-        ttl <= 0 ||
-        new Date(urlObject.createdAt + urlObject.expireAfter).getTime() <
-          Date.now()
-      ) {
-        await this.deleteUrl(hashedSlug);
-
-        return null;
-      }
-    }
-
-    return urlObject;
+    return url;
   }
 
   async updateUrl(hashedSlug: string, updateData: Partial<Url>) {
@@ -57,7 +29,7 @@ class UrlRepository {
 
     const newUrl = { ...url, ...updateData };
 
-    await this.client.hset(key, newUrl);
+    await storage.setItem(key, newUrl);
 
     return newUrl;
   }
@@ -65,7 +37,7 @@ class UrlRepository {
   async deleteUrl(hashedSlug: string) {
     const key = `url:${hashedSlug}`;
 
-    await this.client.del(key);
+    await storage.del(key);
   }
 }
 

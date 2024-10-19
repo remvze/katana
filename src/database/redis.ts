@@ -1,22 +1,18 @@
-import IORedis from 'ioredis';
-import { Redis as UpstashRedis } from '@upstash/redis';
+import { createStorage } from 'unstorage';
+
+import upstash from './drivers/upstash';
+import redis from 'unstorage/drivers/redis';
+
 import { config } from '@/config';
 
-export type Client = UpstashRedis | IORedis;
-
-let client: Client;
-
-export function createRedisClient() {
-  if (client) return client;
-
-  if (config.deployment.runtime === 'cloudflare') {
-    client = new UpstashRedis({
-      token: config.redis.upstashRedisToken,
-      url: config.redis.upstashRedisUrl,
-    });
-  } else {
-    client = new IORedis(config.redis.redisUrl);
-  }
-
-  return client;
-}
+export const storage = createStorage({
+  driver:
+    config.deployment.runtime === 'cloudflare'
+      ? upstash({
+          token: config.redis.upstashRedisToken,
+          url: config.redis.upstashRedisUrl,
+        })
+      : redis({
+          url: config.redis.redisUrl,
+        }),
+});
