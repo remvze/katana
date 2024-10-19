@@ -10,10 +10,8 @@ services:
       - katana-network
 
   katana:
-    image: ghcr.io/remvze/katana
+    build: .
     restart: always
-    deploy:
-      replicas: 3
     environment:
       PUBLIC_TURNSTILE_SITE_KEY: ${PUBLIC_TURNSTILE_SITE_KEY}
       TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY}
@@ -26,8 +24,6 @@ services:
       - redis
     networks:
       - katana-network
-    labels:
-      - 'com.centurylinklabs.watchtower.enable=true'
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:4321']
       interval: 30s
@@ -53,16 +49,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
-
-  watchtower:
-    image: containrrr/watchtower
-    container_name: watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: --cleanup --interval 30 --label-enable --rolling-restart
-    restart: unless-stopped
-    networks:
-      - katana-network
 
 networks:
   katana-network:
