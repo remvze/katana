@@ -1,60 +1,63 @@
-import { Types } from 'mongoose';
-
-import { dbConnect } from '@/database/mongo';
-import UrlModel from '@/models/url.model';
-import { normalizeId } from '@/lib/normalizer';
-
-import type { UrlDocument } from '@/models/url.model';
+import { createRedisClient } from '@/database/redis';
+import { UrlModel } from '@/models/url.model';
+import type { Url } from '@/models/url.model';
 
 class UrlRepository {
-  async createUrl(urlData: Partial<UrlDocument>) {
-    await dbConnect();
+  private client = createRedisClient();
 
-    const doc = await UrlModel.create(urlData);
+  async createUrl(urlData: UrlModel) {
+    const key = `url:${urlData.hashedSlug}`;
+    const exists = await this.getUrl(urlData.hashedSlug);
 
-    return doc ? normalizeId(doc.toObject()) : null;
+    if (exists) throw new Error('URL already exists');
+
+    await this.client.hset(key, urlData.toJSON());
+
+    if (urlData.expireAfter) {
+      await this.client.expire(key, Number(urlData.expireAfter));
+    }
   }
 
   async getUrl(hashedSlug: string) {
-    await dbConnect();
+    const key = `url:${hashedSlug}`;
+    const url = await this.client.hgetall(key);
 
-    const document = await UrlModel.findOne({ hashedSlug }).lean<UrlDocument>();
+    const urlObject = url ? UrlModel.fromJSON(url as unknown as Url) : null;
 
-    return document ? normalizeId(document) : null;
+    if (urlObject && urlObject.expireAfter) {
+      const ttl = await this.client.ttl(key);
+
+      if (
+        ttl <= 0 ||
+        new Date(urlObject.createdAt + urlObject.expireAfter).getTime() <
+          Date.now()
+      ) {
+        await this.deleteUrl(hashedSlug);
+
+        return null;
+      }
+    }
+
+    return urlObject;
   }
 
-  async getUrlById(id: string) {
-    await dbConnect();
+  async updateUrl(hashedSlug: string, updateData: Partial<Url>) {
+    const key = `url:${hashedSlug}`;
+    const url = await this.getUrl(hashedSlug);
 
-    const document = await UrlModel.findById(
-      new Types.ObjectId(id),
-    ).lean<UrlDocument>();
+    if (!url) throw new Error("URL doesn't exist");
 
-    return document ? normalizeId(document) : null;
+    const newUrl = { ...url, ...updateData };
+
+    await this.client.hset(key, newUrl);
+
+    return newUrl;
   }
 
-  async updateUrl(id: string, updateData: Partial<UrlDocument>) {
-    await dbConnect();
+  async deleteUrl(hashedSlug: string) {
+    const key = `url:${hashedSlug}`;
 
-    const document = await UrlModel.findByIdAndUpdate(
-      new Types.ObjectId(id),
-      updateData,
-      {
-        new: true,
-      },
-    ).lean<UrlDocument>();
-
-    return document ? normalizeId(document) : null;
-  }
-
-  async deleteUrl(id: string) {
-    await dbConnect();
-
-    const document = await UrlModel.findByIdAndDelete(id, {
-      new: true,
-    }).lean<UrlDocument>();
-
-    return document ? normalizeId(document) : null;
+    await this.client.del(key);
   }
 }
 

@@ -2,14 +2,14 @@
 import Layout from '@/layouts/layout.astro';
 import { EncryptedUrl } from '@/components/encrypted-url';
 import { getUrl } from '@/services/url.service';
-import { incrementTotalClicks } from '@/services/statistic.service';
+// import { incrementTotalClicks } from '@/services/statistic.service';
 
 const { slug } = Astro.params;
 
 const data = await getUrl(slug!);
 
 if (data) {
-  await incrementTotalClicks();
+  // await incrementTotalClicks();
 } else {
   return Astro.rewrite('/404');
 }

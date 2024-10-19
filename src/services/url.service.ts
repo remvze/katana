@@ -8,6 +8,7 @@ import {
   sha256,
 } from '@/lib/crypto.server';
 import { DESTRUCTION_KEY_BYTES, SLUG_LENGTH } from '@/constants/url';
+import { UrlModel } from '@/models/url.model';
 
 export async function createUrl(
   encryptedUrl: string,
@@ -31,14 +32,17 @@ export async function createUrl(
   const destructionKey = generateSecureKey(DESTRUCTION_KEY_BYTES);
   const destructionKeyHash = await hash(destructionKey, 12);
 
-  await urlRepository.createUrl({
-    destructionKey: destructionKeyHash,
-    encryptedUrl: encryptedUrl,
-    expiresAt:
-      expireAfter > 0 ? new Date(Date.now() + expireAfter * 1000) : null,
-    hashedSlug: hashedSlug,
-    isPasswordProtected: isPasswordProtected,
-  });
+  await urlRepository.createUrl(
+    new UrlModel(
+      hashedSlug,
+      encryptedUrl,
+      destructionKeyHash,
+      isPasswordProtected,
+      0,
+      Date.now(),
+      expireAfter ? expireAfter : null,
+    ),
+  );
 
   return { destructionKey: `${slug}:${destructionKey}`, slug };
 }
@@ -48,7 +52,7 @@ export async function getUrl(slug: string) {
   const url = await urlRepository.getUrl(hashedSlug);
 
   if (url) {
-    const updatedUrl = await urlRepository.updateUrl(url.id, {
+    const updatedUrl = await urlRepository.updateUrl(hashedSlug, {
       clicks: url.clicks + 1,
     });
 
@@ -75,5 +79,5 @@ export async function deleteUrl(destructionKey: string) {
 
   if (!isDestructionKeyValid) throw new Error('Invalid destruction key');
 
-  await urlRepository.deleteUrl(url.id);
+  await urlRepository.deleteUrl(hashedSlug);
 }

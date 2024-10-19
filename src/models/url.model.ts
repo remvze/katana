@@ -1,32 +1,45 @@
-import mongoose, { Schema } from 'mongoose';
-import type { Document, Types } from 'mongoose';
-
-export interface UrlDocument extends Document {
-  _id: Types.ObjectId;
+export interface Url {
   clicks: number;
-  createdAt: Date;
+  createdAt: number;
   destructionKey: string;
   encryptedUrl: string;
-  expiresAt: Date | null;
+  expireAfter: number | null;
   hashedSlug: string;
   isPasswordProtected: boolean;
-  updatedAt: Date;
 }
 
-const UrlSchema = new Schema<UrlDocument>(
-  {
-    clicks: { default: 0, type: Number },
-    destructionKey: { required: true, type: String },
-    encryptedUrl: { required: true, type: String },
-    expiresAt: { default: null, type: Date },
-    hashedSlug: { required: true, type: String },
-    isPasswordProtected: { default: false, type: Boolean },
-  },
-  { timestamps: true },
-);
+export class UrlModel {
+  constructor(
+    public hashedSlug: string,
+    public encryptedUrl: string,
+    public destructionKey: string,
+    public isPasswordProtected: boolean,
+    public clicks: number,
+    public createdAt: number,
+    public expireAfter: number | null,
+  ) {}
 
-UrlSchema.index({ hashedSlug: 1 }, { unique: true });
-UrlSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+  toJSON() {
+    return {
+      clicks: this.clicks,
+      createdAt: this.createdAt,
+      destructionKey: this.destructionKey,
+      encryptedUrl: this.encryptedUrl,
+      expireAfter: this.expireAfter,
+      hashedSlug: this.hashedSlug,
+      isPasswordProtected: this.isPasswordProtected,
+    };
+  }
 
-export default mongoose.models.Url ||
-  mongoose.model<UrlDocument>('Url', UrlSchema);
+  static fromJSON(data: Url) {
+    return new UrlModel(
+      data.hashedSlug,
+      data.encryptedUrl,
+      data.destructionKey,
+      data.isPasswordProtected,
+      data.clicks,
+      data.createdAt,
+      data.expireAfter,
+    );
+  }
+}
