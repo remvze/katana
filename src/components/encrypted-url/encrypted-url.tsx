@@ -19,6 +19,8 @@ export function EncryptedUrl({
   const [password, setPassword] = useState('');
   const [askPassword, setAskPassword] = useState(false);
 
+  useEffect(() => console.log({ isPasswordProtected }), [isPasswordProtected]);
+
   useEffect(() => {
     const hash = location.hash.split('#')[1];
 
