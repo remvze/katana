@@ -22,8 +22,6 @@ class UrlRepository {
     const key = `url:${hashedSlug}`;
     const url = await this.client.hgetall(key);
 
-    console.log({ url });
-
     const urlObject = url
       ? Object.keys(url).length > 0
         ? UrlModel.fromJSON(url as unknown as Url)
