@@ -8,11 +8,11 @@ declare global {
 
 const MONGODB_URI = config.mongodb.uri;
 
-if (!MONGODB_URI) {
-  throw new Error(
-    'Please define the MONGODB_URI environment variable inside .env.local',
-  );
-}
+// if (!MONGODB_URI) {
+//   throw new Error(
+//     'Please define the MONGODB_URI environment variable inside .env.local',
+//   );
+// }
 
 let cached = global.mongoose;
 
