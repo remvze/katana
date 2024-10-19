@@ -3,33 +3,31 @@ services:
     image: redis:latest
     container_name: katana-redis
     restart: always
-    ports:
-      - '6379:6379'
     command: ['redis-server', '--appendonly', 'yes']
     networks:
       - katana-network
 
   katana:
-    build: .
+    build:
+      context: .
+      args:
+        PUBLIC_TURNSTILE_SITE_KEY: ${PUBLIC_TURNSTILE_SITE_KEY}
+        TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY}
+        PUBLIC_UNSHORTENER_LINK: ${PUBLIC_UNSHORTENER_LINK}
+        REDIS_URL: 'redis://redis:6379'
+    container_name: katana-app
     restart: always
     environment:
       PUBLIC_TURNSTILE_SITE_KEY: ${PUBLIC_TURNSTILE_SITE_KEY}
       TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY}
       PUBLIC_UNSHORTENER_LINK: ${PUBLIC_UNSHORTENER_LINK}
-      REDIS_URL: ${REDIS_URL}
-      HOST: 0.0.0.0
+      REDIS_URL: 'redis://redis:6379'
     env_file:
       - .env
     depends_on:
       - redis
     networks:
       - katana-network
-    healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:4321']
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
 
   caddy:
     image: caddy:latest
@@ -43,12 +41,6 @@ services:
       - katana
     networks:
       - katana-network
-    healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:3000']
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
 
 networks:
   katana-network:

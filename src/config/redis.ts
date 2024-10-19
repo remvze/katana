@@ -1,7 +1,5 @@
-import { getEnv } from './getter';
-
 export const redisConfig = {
-  redisUrl: getEnv('REDIS_URL'),
-  upstashRedisToken: getEnv('UPSTASH_REDIS_TOKEN'),
-  upstashRedisUrl: getEnv('UPSTASH_REDIS_URL'),
+  redisUrl: import.meta.env.REDIS_URL,
+  upstashRedisToken: import.meta.env.UPSTASH_REDIS_TOKEN,
+  upstashRedisUrl: import.meta.env.UPSTASH_REDIS_URL,
 };
