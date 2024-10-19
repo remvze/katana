@@ -24,6 +24,7 @@ app.post('/new', validator('json', newSchema), async c => {
   const { encryptedUrl, expireAfter, isPasswordProtected, token } =
     await c.req.json();
 
+  console.log('Hello One');
   const isExpirationValid = expirations.find(
     item => item.value === expireAfter,
   );
@@ -32,13 +33,17 @@ app.post('/new', validator('json', newSchema), async c => {
     return c.json(errorResponse('Expiration date is not valid.'), 400);
 
   const tokenIsValid = await verifyToken(token);
+  console.log('Hello Two');
 
   if (tokenIsValid) {
+    console.log('Hello Three');
     const { destructionKey, slug } = await createUrl(
       encryptedUrl,
       !!isPasswordProtected || false,
       expireAfter,
     );
+
+    console.log('Hello Four');
 
     // await incrementCreatedLinks();
 
