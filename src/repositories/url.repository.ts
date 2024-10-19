@@ -9,16 +9,29 @@ class UrlRepository {
 
     if (exists) throw new Error('URL already exists');
 
-    await storage.setItem(key, urlData.toJSON(), {
+    await storage.setItem(key, urlData.serialize(), {
       ttl: urlData.expireAfter ?? null,
     });
   }
 
   async getUrl(hashedSlug: string) {
     const key = `url:${hashedSlug}`;
-    const url = await storage.getItem<Url>(key);
+    const data = await storage.getItem<Url>(key);
 
-    return url;
+    if (!data) return null;
+
+    const urlModel = UrlModel.deserialize(data);
+
+    if (
+      urlModel.expireAfter &&
+      urlModel.createdAt + urlModel.expireAfter * 1000 < Date.now()
+    ) {
+      await this.deleteUrl(urlModel.hashedSlug);
+
+      return null;
+    }
+
+    return urlModel;
   }
 
   async updateUrl(hashedSlug: string, updateData: Partial<Url>) {
@@ -27,11 +40,12 @@ class UrlRepository {
 
     if (!url) throw new Error("URL doesn't exist");
 
-    const newUrl = { ...url, ...updateData };
+    const updatedUrl = { ...url, ...updateData };
+    const updatedUrlModel = UrlModel.deserialize(updatedUrl);
 
-    await storage.setItem(key, newUrl);
+    await storage.setItem(key, updatedUrlModel.serialize());
 
-    return newUrl;
+    return updatedUrlModel;
   }
 
   async deleteUrl(hashedSlug: string) {

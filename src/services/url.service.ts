@@ -10,39 +10,41 @@ import {
 import { DESTRUCTION_KEY_BYTES, SLUG_LENGTH } from '@/constants/url';
 import { UrlModel } from '@/models/url.model';
 
+async function generateUniqueSlug() {
+  let slug: string;
+  let hashedSlug: string;
+  let slugExists = true;
+
+  do {
+    slug = await generateSecureSlug(SLUG_LENGTH);
+    hashedSlug = sha256(slug);
+
+    const shortUrl = await urlRepository.getUrl(hashedSlug);
+    slugExists = !!shortUrl;
+  } while (slugExists);
+
+  return { hashedSlug, slug };
+}
+
 export async function createUrl(
   encryptedUrl: string,
   isPasswordProtected: boolean,
   expireAfter: number,
 ) {
-  let slug;
-  let slugExists = true;
-
-  do {
-    slug = await generateSecureSlug(SLUG_LENGTH);
-    const hashedSlug = sha256(slug);
-
-    const shortUrl = await urlRepository.getUrl(hashedSlug);
-
-    if (!shortUrl) slugExists = false;
-  } while (slugExists);
-
-  const hashedSlug = sha256(slug);
+  const { hashedSlug, slug } = await generateUniqueSlug();
 
   const destructionKey = generateSecureKey(DESTRUCTION_KEY_BYTES);
   const destructionKeyHash = await hash(destructionKey, 12);
 
-  await urlRepository.createUrl(
-    new UrlModel(
-      hashedSlug,
-      encryptedUrl,
-      destructionKeyHash,
-      isPasswordProtected,
-      0,
-      Date.now(),
-      expireAfter ? expireAfter : null,
-    ),
-  );
+  const urlModel = UrlModel.create({
+    destructionKey: destructionKeyHash,
+    encryptedUrl,
+    expireAfter: expireAfter || null,
+    hashedSlug,
+    isPasswordProtected,
+  });
+
+  await urlRepository.createUrl(urlModel);
 
   return { destructionKey: `${slug}:${destructionKey}`, slug };
 }

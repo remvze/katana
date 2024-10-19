@@ -19,7 +19,7 @@ export class UrlModel {
     public expireAfter: number | null,
   ) {}
 
-  toJSON() {
+  serialize() {
     return {
       clicks: this.clicks,
       createdAt: this.createdAt,
@@ -31,7 +31,7 @@ export class UrlModel {
     };
   }
 
-  static fromJSON(data: Url) {
+  static deserialize(data: Url) {
     return new UrlModel(
       data.hashedSlug,
       data.encryptedUrl,
@@ -40,6 +40,24 @@ export class UrlModel {
       data.clicks,
       data.createdAt,
       data.expireAfter,
+    );
+  }
+
+  static create({
+    destructionKey,
+    encryptedUrl,
+    expireAfter,
+    hashedSlug,
+    isPasswordProtected,
+  }: Omit<Url, 'createdAt' | 'clicks'>) {
+    return new UrlModel(
+      hashedSlug,
+      encryptedUrl,
+      destructionKey,
+      isPasswordProtected,
+      0,
+      Date.now(),
+      expireAfter || null,
     );
   }
 }
