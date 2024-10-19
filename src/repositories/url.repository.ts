@@ -24,7 +24,11 @@ class UrlRepository {
 
     console.log({ url });
 
-    const urlObject = url ? UrlModel.fromJSON(url as unknown as Url) : null;
+    const urlObject = url
+      ? Object.keys(url).length > 0
+        ? UrlModel.fromJSON(url as unknown as Url)
+        : null
+      : null;
 
     if (urlObject && urlObject.expireAfter) {
       const ttl = await this.client.ttl(key);
