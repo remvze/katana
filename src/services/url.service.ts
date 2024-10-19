@@ -15,6 +15,8 @@ export async function createUrl(
   isPasswordProtected: boolean,
   expireAfter: number,
 ) {
+  console.log('service', { isPasswordProtected });
+
   let slug;
   let slugExists = true;
 
