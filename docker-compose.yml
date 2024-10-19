@@ -28,7 +28,6 @@ services:
       - katana-network
     labels:
       - 'com.centurylinklabs.watchtower.enable=true'
-    command: sh -c "npm run migrate:up && npm run start"
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:4321']
       interval: 30s
