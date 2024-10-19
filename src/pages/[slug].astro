@@ -10,6 +10,7 @@ const data = await getUrl(slug!);
 
 if (data) {
   // await incrementTotalClicks();
+  console.log('slug', data.isPasswordProtected);
 } else {
   return Astro.rewrite('/404');
 }
