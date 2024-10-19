@@ -27,7 +27,7 @@ export class UrlModel {
       encryptedUrl: this.encryptedUrl,
       expireAfter: this.expireAfter,
       hashedSlug: this.hashedSlug,
-      isPasswordProtected: this.isPasswordProtected ? 1 : 0,
+      isPasswordProtected: this.isPasswordProtected,
     };
   }
 

@@ -28,6 +28,10 @@ class UrlRepository {
         : null
       : null;
 
+    if (url) {
+      url.isPasswordProtected = JSON.parse(url.isPasswordProtected as string);
+    }
+
     if (urlObject && urlObject.expireAfter) {
       const ttl = await this.client.ttl(key);
 
