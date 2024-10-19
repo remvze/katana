@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.18](https://github.com/remvze/katana/compare/v0.0.17...v0.0.18) (2024-10-19)
+
+
+### ✨ Features
+
+* add redis to docker compose ([3bb4db1](https://github.com/remvze/katana/commit/3bb4db19d0e0292ad11c6b17f2fae6c6fc25ce97))
+* migrate to redis ([30cfdd5](https://github.com/remvze/katana/commit/30cfdd520b4efaae925b1dc29eff288ac1368b8e))
+
 ### [0.0.17](https://github.com/remvze/katana/compare/v0.0.16...v0.0.17) (2024-10-18)
 
 
