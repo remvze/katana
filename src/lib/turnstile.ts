@@ -6,7 +6,7 @@ export async function verifyToken(token: string) {
 
   const body = new URLSearchParams();
 
-  body.append('secret', config.turnstile.secretKey());
+  body.append('secret', config.turnstile.secretKey);
   body.append('response', token);
 
   const verificationResponse = await fetch(verificationUrl, {

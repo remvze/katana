@@ -9,13 +9,13 @@ let client: Client;
 export function createRedisClient() {
   if (client) return client;
 
-  if (config.deployment.runtime() === 'cloudflare') {
+  if (config.deployment.runtime === 'cloudflare') {
     client = new UpstashRedis({
-      token: config.redis.upstashRedisToken(),
-      url: config.redis.upstashRedisUrl(),
+      token: config.redis.upstashRedisToken,
+      url: config.redis.upstashRedisUrl,
     });
   } else {
-    client = new IORedis(config.redis.redisUrl());
+    client = new IORedis(config.redis.redisUrl);
   }
 
   return client;

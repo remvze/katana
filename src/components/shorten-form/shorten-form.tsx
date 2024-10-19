@@ -23,8 +23,8 @@ import { createUrl } from '@/api/url';
 import { expirations } from '@/lib/expiration';
 
 export function ShortenForm() {
-  const siteKey = config.turnstile.publicSiteKey();
-  const unshortenLink = config.other.publicUnshortenLink();
+  const siteKey = config.turnstile.publicSiteKey;
+  const unshortenLink = config.other.publicUnshortenLink;
 
   const turnstile = useTurnstile();
   const [mountTurnstile, setMountTurnstile] = useState(false);
