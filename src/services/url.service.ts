@@ -15,8 +15,6 @@ export async function createUrl(
   isPasswordProtected: boolean,
   expireAfter: number,
 ) {
-  console.log('service', { isPasswordProtected });
-
   let slug;
   let slugExists = true;
 
@@ -57,9 +55,6 @@ export async function getUrl(slug: string) {
     const updatedUrl = await urlRepository.updateUrl(hashedSlug, {
       clicks: url.clicks + 1,
     });
-
-    console.log('get', url?.isPasswordProtected);
-    console.log('get-updated', updatedUrl?.isPasswordProtected);
 
     return updatedUrl;
   }

@@ -34,8 +34,6 @@ app.post('/new', validator('json', newSchema), async c => {
   const tokenIsValid = await verifyToken(token);
 
   if (tokenIsValid) {
-    console.log('controller', !!isPasswordProtected || false);
-
     const { destructionKey, slug } = await createUrl(
       encryptedUrl,
       !!isPasswordProtected || false,
