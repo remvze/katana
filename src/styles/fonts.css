@@ -34,31 +34,11 @@
   font-display: swap;
 }
 
-/* playfair-display-700 - latin */
+/* gloock-regular - latin */
 @font-face {
-  font-family: 'Playfair Display';
-  font-style: normal;
-  font-weight: 700;
-  src: url('/fonts/playfair-display-v37-latin-700.woff2') format('woff2');
-  font-display: swap;
-}
-
-/* space-grotesk-regular - latin */
-
-/* @font-face {
-  font-family: 'Space Grotesk';
+  font-family: Gloock;
   font-style: normal;
   font-weight: 400;
-  src: url('/fonts/space-grotesk-v16-latin-regular.woff2') format('woff2');
+  src: url('/fonts/gloock-v6-latin-regular.woff2') format('woff2');
   font-display: swap;
-} */
-
-/* space-grotesk-500 - latin */
-
-/* @font-face {
-  font-family: 'Space Grotesk';
-  font-style: normal;
-  font-weight: 500;
-  src: url('/fonts/space-grotesk-v16-latin-500.woff2') format('woff2');
-  font-display: swap;
-} */
+}
