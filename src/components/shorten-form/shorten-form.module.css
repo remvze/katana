@@ -27,7 +27,6 @@
       height: 45px;
       padding: 0 12px;
       margin-top: 8px;
-      font-family: var(--font-mono);
       font-size: var(--font-sm);
       color: var(--color-foreground);
       background-color: var(--color-neutral-2);
@@ -48,7 +47,6 @@
       height: 45px;
       padding: 0 12px;
       margin-top: 8px;
-      font-family: var(--font-mono);
       font-size: var(--font-sm);
       color: var(--color-foreground);
       background-color: var(--color-neutral-2);
@@ -69,7 +67,6 @@
       width: 100%;
       height: 45px;
       margin-top: 8px;
-      font-family: var(--font-mono);
       font-size: var(--font-sm);
       background-color: var(--color-neutral-2);
       border: 1px solid var(--color-neutral-6);
@@ -89,7 +86,6 @@
         height: 100%;
         padding: 0 0 0 12px;
         margin-top: 0;
-        font-family: var(--font-mono);
         font-size: var(--font-sm);
         color: var(--color-foreground);
         background-color: transparent;
@@ -196,7 +192,6 @@
         min-width: 0;
         height: 100%;
         padding: 0 12px;
-        font-family: var(--font-mono);
         font-size: var(--font-sm);
         color: var(--color-foreground);
         background-color: transparent;
