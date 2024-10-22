@@ -97,8 +97,13 @@ import { Velustro } from 'uvcanvas';
       line-height: 1.2;
 
       & .line {
-        color: var(--color-foreground-subtle);
-        text-shadow: 0 -1px 0 var(--color-foreground);
+        background: linear-gradient(
+          var(--color-foreground-subtle),
+          var(--color-foreground-subtle),
+          var(--color-neutral-6)
+        );
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
 
       & .gradient {
