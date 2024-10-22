@@ -1,107 +1,33 @@
 ---
-import { Velustro } from 'uvcanvas';
+import { Container } from './container';
 ---
 
-<div class="container">
-  <div class="hero">
-    <div class="effect">
-      <Velustro client:load />
-      <div class="overlay"></div>
-      <div class="noise"></div>
-    </div>
-
-    <div class="logo">
-      <img alt="Timesy Logo" height={45} src="/logo.svg" width={38.97} />
-    </div>
-
-    <h2 class="title"><span>Katana</span></h2>
-    <h1 class="desc">Short links made secure.</h1>
-  </div>
-</div>
+<Container>
+  <section class="hero">
+    <h1>
+      <span class="gradient">AwsmShort</span>
+      <span class="dash">_</span>
+    </h1>
+    <p class="desc">Short links made secure.</p>
+  </section>
+</Container>
 
 <style>
-  .container {
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-  }
-
   .hero {
-    position: relative;
-    padding: 100px 0 30px;
-    margin-bottom: 20px;
-    overflow: hidden;
-    text-align: center;
+    padding: 100px 0 48px;
 
-    & .effect {
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: -1;
-      width: 100%;
-      height: 100%;
+    & h1 {
+      font-family: var(--font-heading);
+      font-weight: 600;
 
-      & .overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(rgb(0 0 0 / 60%), var(--color-neutral-1));
-        backdrop-filter: grayscale(100%);
-      }
-
-      & .noise {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: transparent url('/images/noise.png') repeat 0 0;
-        mix-blend-mode: lighten;
-        opacity: 0.5;
-      }
-    }
-
-    & .logo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 50px;
-      height: 50px;
-      margin: 0 auto;
-      margin-bottom: 12px;
-      background: linear-gradient(
-        var(--color-neutral-1),
-        var(--color-neutral-3)
-      );
-      border: 1px solid var(--color-neutral-6);
-      border-radius: 16px;
-      box-shadow: inset 0 -1px 0 var(--color-neutral-8);
-
-      & img {
-        height: 28px;
-      }
-    }
-
-    & .title {
-      font-family: var(--font-display);
-      font-size: var(--font-2xlg);
-      font-weight: 400;
-
-      & span {
-        background: linear-gradient(
-          135deg,
-          var(--color-foreground),
-          var(--color-neutral-9)
-        );
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
+      & .dash {
+        color: #4ade80;
       }
     }
 
     & .desc {
       margin-top: 4px;
+      font-size: var(--font-sm);
       color: var(--color-foreground-subtle);
     }
   }
