@@ -5,7 +5,7 @@ import { Container } from './container';
 <Container>
   <section class="hero">
     <h1>
-      <span class="gradient">AwsmShort</span>
+      <span class="gradient">Awsm</span>Short
       <span class="dash">_</span>
     </h1>
     <p class="desc">Short links made secure.</p>
@@ -18,16 +18,28 @@ import { Container } from './container';
 
     & h1 {
       font-family: var(--font-heading);
+      font-size: var(--font-md);
       font-weight: 600;
 
       & .dash {
         color: #4ade80;
       }
+
+      & .gradient {
+        background: linear-gradient(
+          135deg,
+          var(--color-foreground),
+          var(--color-foreground),
+          var(--color-foreground),
+          var(--color-neutral-9)
+        );
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
     }
 
     & .desc {
       margin-top: 4px;
-      font-size: var(--font-sm);
       color: var(--color-foreground-subtle);
     }
   }
