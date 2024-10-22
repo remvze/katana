@@ -1,0 +1,205 @@
+[33ma202125[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m style: minor changes
+[33mb94578d[m feat: improve the hero
+[33m54f0be8[m style: minor change
+[33mb67f8d1[m feat: return to the new hero
+[33mdc50d30[m style: minor change
+[33m8694561[m style: change font
+[33m24ef089[m style: wip
+[33m9f877a5[m style: minor changes
+[33m1b825fa[m style: minor changes
+[33mc29f5ec[m feat: add secret hero
+[33m4a4e3bf[m style: minor changes
+[33mbe29410[m style: minor changes
+[33m637abd2[m style: minor changes
+[33m6713442[m feat: add new hero
+[33m9086b85[m style: change logo
+[33m118019e[m style: change logo color
+[33mdcb4468[m style: minor changes
+[33mf3b06d7[m style: decrease border radius
+[33mbeb78f9[m feat: improve hero
+[33mbfb732e[m style: increase border radius
+[33ma91b333[m[33m ([m[1;32mmigrate[m[33m)[m refactor: minor improvements
+[33m32174ad[m feat: add unstorage
+[33m90b8bbe[m fix: change password protection flag
+[33m8569933[m fix: change password protection flag
+[33mf091a01[m chore: add log
+[33mc555389[m chore: add logs
+[33m2931c43[m chore: add logs
+[33mc8de3d2[m chore: add logs
+[33m622bdca[m fix: password protection
+[33m70e8c8b[m fix: add better guard for empty record
+[33mdc85358[m chore: add logs
+[33mad92932[m chore: add logs
+[33m7f7d144[m chore: add logs
+[33m0bc3110[m fix: remove mongo guard
+[33m04036f4[m fix: remove functions
+[33m1f50819[m feat: change docker files
+[33m736a134[m feat: remove prebuilt image
+[33m31a1f82[m chore: remove custom command
+[33mcba4717[m[33m ([m[1;33mtag: v0.0.18[m[33m)[m chore(release): 0.0.18
+[33m3bb4db1[m feat: add redis to docker compose
+[33m30cfdd5[m feat: migrate to redis
+[33m11e2150[m[33m ([m[1;33mtag: v0.0.17[m[33m)[m chore(release): 0.0.17
+[33m598ab16[m feat: improve the hero
+[33m16b9284[m[33m ([m[1;33mtag: v0.0.16[m[33m, [m[1;32mredesign[m[33m)[m chore(release): 0.0.16
+[33m0ef41d7[m style: minor change
+[33me6431e2[m chore: change logo colors
+[33m0922681[m[33m ([m[1;33mtag: v0.0.15[m[33m)[m chore(release): 0.0.15
+[33mf845124[m feat: add services tab
+[33m03cd5d9[m[33m ([m[1;33mtag: v0.0.14[m[33m)[m chore(release): 0.0.14
+[33m7b0fd91[m feat: add secret button
+[33ma18202f[m Merge pull request #2 from remvze/dependabot/npm_and_yarn/multi-d57ee3990e
+[33m3d3622d[m chore(deps): bump cookie and astro
+[33mf6de27a[m Merge pull request #1 from remvze/dependabot/npm_and_yarn/rollup-4.24.0
+[33m9ffaf0e[m chore(deps): bump rollup from 4.21.3 to 4.24.0
+[33m83eb508[m fix: make the getter a function
+[33m5960b8f[m[33m ([m[1;33mtag: v0.0.13[m[33m)[m chore(release): 0.0.13
+[33m671edc0[m[33m ([m[1;33mtag: v0.0.12[m[33m)[m chore(release): 0.0.12
+[33mfde77f9[m style: center the binary
+[33m0389323[m feat: add healthchecks
+[33mebdd3bb[m[33m ([m[1;33mtag: v0.0.11[m[33m)[m chore(release): 0.0.11
+[33m7568511[m refactor: better env handling
+[33md926692[m[33m ([m[1;33mtag: v0.0.10[m[33m)[m chore(release): 0.0.10
+[33mcde85bf[m fix: add process.env
+[33mbf137b2[m[33m ([m[1;33mtag: v0.0.9[m[33m)[m chore(release): 0.0.9
+[33m2292a09[m fix: add std-env
+[33m2af7c7b[m chore: remove healthchecks
+[33m63699b9[m[33m ([m[1;33mtag: v0.0.8[m[33m)[m chore(release): 0.0.8
+[33ma4e75ab[m fix: add variable source
+[33m9d6c9f1[m[33m ([m[1;33mtag: v0.0.7[m[33m)[m chore(release): 0.0.7
+[33m747c078[m fix: include placeholders
+[33m8c20dcd[m[33m ([m[1;33mtag: v0.0.6[m[33m)[m chore(release): 0.0.6
+[33m0b456aa[m fix: wip
+[33m50a9219[m chore: wip
+[33m00f9cd7[m fix: wip
+[33mb70b4dd[m[33m ([m[1;33mtag: v0.0.5[m[33m)[m chore(release): 0.0.5
+[33m6fd5939[m chore: test watchtower
+[33m0981ff3[m fix: wip
+[33mf02fb73[m fix: wip
+[33m4bf9e26[m fix: change caddy ip
+[33mf76a1bd[m feat: add caddy
+[33m1f357af[m[33m ([m[1;33mtag: v0.0.4[m[33m)[m chore(release): 0.0.4
+[33mdfc3df3[m chore: test watchtower
+[33m94fa291[m chore: better reverse proxy
+[33m085d4a5[m chore: add health route
+[33m4f684a7[m[33m ([m[1;33mtag: v0.0.3[m[33m)[m chore(release): 0.0.3
+[33m0b4ca55[m chore: test watchtower
+[33m9fb1bfd[m feat: add watchtower
+[33m8b184f1[m[33m ([m[1;33mtag: v0.0.2[m[33m)[m chore(release): 0.0.2
+[33m557a2e5[m fix: remove extra container
+[33m3198885[m chore: change health check
+[33m3d6b294[m chore: change health check
+[33m320d504[m chore: change health check
+[33m93df340[m fix: remove mongodb healthcheck
+[33m69f3dfa[m fix: remove mongodb healthcheck
+[33m63237a3[m fix: mongo health check
+[33mf882d2e[m fix: mongo health check
+[33m11c8313[m fix: mongo health check
+[33m27fb764[m fix: typo
+[33m48c00ab[m chore: fail on purpose (temp)
+[33m4adfed4[m chore: add health checks
+[33m1e0c3c6[m fix: minor change
+[33mfa46082[m fix: minor change
+[33mee65fe0[m fix: minor change
+[33m023285e[m fix: minor change
+[33m1255d0a[m fix: minor change
+[33m3bb3345[m fix: minor change
+[33m4faf284[m feat: add simple load balacing
+[33md0c548b[m fix: remove container name
+[33m69eab14[m chore: remove version
+[33md4620bb[m chore: test replicas
+[33m997ff05[m chore: update example env
+[33m0fc56b1[m chore: add caddyfile
+[33m1adca84[m chore: update command
+[33m2058a50[m chore: add port
+[33m7dd306e[m chore: update docker compose
+[33m16e25bb[m fix: override start command
+[33md392471[m feat: update docker files
+[33m836546b[m chore: update docker files
+[33me56283e[m chore: update docker files
+[33m4e46083[m feat: add basic migrations for indexes
+[33me1b2759[m chore: add secret expirations
+[33m9d96475[m feat: add hashed public id
+[33me978e81[m feat: add max file size
+[33m1aaf6d3[m refactor: relocate secret address
+[33m3e95d6b[m refactor: add combine for keys
+[33m9ce55c2[m refactor: change property name
+[33m44c7d49[m feat: add index to secret
+[33m477348a[m style: change expireAt to expiresAt
+[33mb2548de[m feat: implement file download
+[33m53070d2[m feat: implement basic file upload
+[33m08a9a45[m feat: implement basic secret viewer
+[33m978dcdb[m feat: implement basic secret creation
+[33m11823bd[m feat: add secret model and repo
+[33mddfad5c[m feat: implement expiration functionality
+[33m8605911[m style: change logo
+[33m3d60ca8[m style: add shines
+[33m1bda44c[m style: minor change
+[33m691b369[m style: minor changes
+[33mae4b1b4[m feat: add cipher text effect
+[33m6450ac3[m feat: add binary pattern
+[33m894c31c[m style: change logo
+[33m9a3ac3d[m feat: minor changes
+[33ma0b3b84[m style: change logo
+[33mf35c56f[m style: minor changes
+[33m26e35a6[m style: minor changes
+[33m8f8d39d[m feat: add random password
+[33m5631185[m style: minor changes
+[33m85c278d[m style: minor changes
+[33m983a959[m style: change turnstile theme
+[33m0c5d7d4[m style: add more details
+[33m78f5faf[m style: add new colors
+[33m55071d0[m style: decrease margin
+[33m57aed90[m style: change label
+[33m696e1cb[m style: add border radius
+[33ma44cf15[m feat: implement statistic service
+[33m8152c15[m feat: add statistic model
+[33m5c27fe9[m refactor: remove extra routes
+[33mc470b29[m feat: add tabs
+[33m61906cb[m style: remove border radius
+[33m63ae1c8[m fix: remove toObject
+[33me678946[m refactor: separate normalizer
+[33m10f2b2f[m refactor: remove supabase
+[33m857b896[m refactor: simplify
+[33ma859a00[m refactor: minor changes
+[33m317c3e4[m refactor: add entities
+[33m80e6b93[m refactor: better dto
+[33m1309179[m refactor: add dto
+[33mb46dbcf[m feat: migrate to mongodb
+[33m44bf2dd[m feat: bring back slug
+[33mbb001a1[m fix: reset turnstile on submit
+[33mf020fa1[m feat: add url deletion feature
+[33m45be933[m refactor: reorder imports
+[33mcffdaaa[m feat: add config file
+[33m71fb20f[m feat: add unshortener link
+[33mb877df6[m refactor: rename files
+[33mfdc9e4c[m feat: add click counter
+[33md4a3bcb[m refactor: separate types
+[33m7d1b9d7[m refactor: make api call abstraction
+[33m955f2e0[m refactor: separate the turnstile logic
+[33m5e0c75b[m fix: typo
+[33mfad2702[m feat: add validator middleware
+[33mf8995f6[m refactor: improve the code
+[33me6abd87[m refactor: add url repository
+[33mec70a09[m refactor: relocate api folder
+[33m1bbe233[m feat: add Hono
+[33m8a0c607[m refactor: minor changes
+[33mdfbf740[m feat: change password protected name
+[33m8f19604[m feat: use uuid instead of identifier
+[33m0d06f42[m feat: hash the identifier
+[33mf296ff9[m feat: add identifier instead of slug
+[33m286dc9c[m fix: add window
+[33m4f7ee8c[m fix: add window
+[33m712afa5[m feat: change from vercel to node adapter
+[33m6af2b40[m feat: add destruction key
+[33mcc24b50[m feat: add link to password generator
+[33mcd83380[m feat: add logo
+[33m04eccb5[m feat: add hero
+[33m656e7f1[m style: url form
+[33m80ac67c[m feat: add password protection
+[33m79ae342[m feat: increase key length
+[33m995c5bd[m feat: implement e2ee
+[33m3318205[m feat: add basic cloudflare turnstile
+[33mce9248d[m feat: implement simple url shortener
+[33m7cb931d[m feat: add supabase
+[33m520a0ec[m feat: initial commit
