@@ -26,3 +26,19 @@ export const urlsTable = pgTable('urls_table', {
 
 export type InsertUrl = typeof urlsTable.$inferInsert;
 export type SelectUrl = typeof urlsTable.$inferSelect;
+
+export const statsTable = pgTable('stats_table', {
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  date: timestamp('date').notNull(),
+  id: serial('id').primaryKey(),
+  totalClicks: integer().default(0).notNull(),
+  totalLinksCreated: integer('total_links_created').default(0).notNull(),
+  totalLinksDeleted: integer('total_links_deleted').default(0).notNull(),
+  totalLinksExpired: integer('total_links_expired').default(0).notNull(),
+  updatedAt: timestamp('updated_at')
+    .notNull()
+    .$onUpdate(() => new Date()),
+});
+
+export type InsertStat = typeof statsTable.$inferInsert;
+export type SelectStat = typeof statsTable.$inferSelect;

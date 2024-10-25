@@ -1,44 +1,75 @@
-import { dbConnect } from '@/database/mongo';
-import { normalizeId } from '@/lib/normalizer';
-
-import type { StatisticDocument } from '@/models/statistic.model';
-import StatisticModel from '@/models/statistic.model';
+import { db } from '@/database/drizzle';
+import { statsTable, type SelectStat } from '@/database/schema';
+import { eq } from 'drizzle-orm';
 
 class StatisticRepository {
-  async incrementCreatedLinks(date: Date) {
-    await dbConnect();
+  async incrementCreatedLinks(date: SelectStat['date']) {
+    const [existingRecord] = await db
+      .select()
+      .from(statsTable)
+      .where(eq(statsTable.date, date))
+      .limit(1);
 
-    const document = await StatisticModel.findOneAndUpdate(
-      { date },
-      { $inc: { totalLinksCreated: 1 } },
-      { new: true, upsert: true },
-    ).lean<StatisticDocument>();
-
-    return document ? normalizeId(document) : null;
+    if (existingRecord) {
+      await db
+        .update(statsTable)
+        .set({
+          ...existingRecord,
+          totalLinksCreated: existingRecord.totalLinksCreated + 1,
+        })
+        .where(eq(statsTable.date, date));
+    } else {
+      await db.insert(statsTable).values({
+        date,
+        totalLinksCreated: 1,
+      });
+    }
   }
 
   async incrementDeletedLinks(date: Date) {
-    await dbConnect();
+    const [existingRecord] = await db
+      .select()
+      .from(statsTable)
+      .where(eq(statsTable.date, date))
+      .limit(1);
 
-    const document = await StatisticModel.findOneAndUpdate(
-      { date },
-      { $inc: { totalLinksDeleted: 1 } },
-      { new: true, upsert: true },
-    ).lean<StatisticDocument>();
-
-    return document ? normalizeId(document) : null;
+    if (existingRecord) {
+      await db
+        .update(statsTable)
+        .set({
+          ...existingRecord,
+          totalLinksDeleted: existingRecord.totalLinksDeleted + 1,
+        })
+        .where(eq(statsTable.date, date));
+    } else {
+      await db.insert(statsTable).values({
+        date,
+        totalLinksDeleted: 1,
+      });
+    }
   }
 
   async incrementTotalClicks(date: Date) {
-    await dbConnect();
+    const [existingRecord] = await db
+      .select()
+      .from(statsTable)
+      .where(eq(statsTable.date, date))
+      .limit(1);
 
-    const document = await StatisticModel.findOneAndUpdate(
-      { date },
-      { $inc: { totalClicks: 1 } },
-      { new: true, upsert: true },
-    ).lean<StatisticDocument>();
-
-    return document ? normalizeId(document) : null;
+    if (existingRecord) {
+      await db
+        .update(statsTable)
+        .set({
+          ...existingRecord,
+          totalClicks: existingRecord.totalClicks + 1,
+        })
+        .where(eq(statsTable.date, date));
+    } else {
+      await db.insert(statsTable).values({
+        date,
+        totalClicks: 1,
+      });
+    }
   }
 }
 

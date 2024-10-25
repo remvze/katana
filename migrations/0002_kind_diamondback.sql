@@ -1,0 +1,1 @@
+ALTER TABLE "stats_table" ALTER COLUMN "date" SET NOT NULL;
