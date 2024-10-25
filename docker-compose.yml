@@ -42,6 +42,11 @@ services:
       POSTGRES_DB: katanadb
     networks:
       - katana-network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   caddy:
     image: caddy:latest
