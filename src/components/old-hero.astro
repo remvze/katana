@@ -17,7 +17,9 @@ import { Velustro } from 'uvcanvas';
     <h2 class="title">
       <span class="line">Short Links That</span><br /><span
         class="reverse-gradient">Respect</span
-      > Your <span class="gradient">Privacy</span>.
+      > Your <span class="gradient"
+        >Privacy<img alt="Hand Drawn Line" src="/line.svg" /></span
+      >.
     </h2>
     <h1 class="desc">
       Privacy-Focused URL Shortener.<br /><span>Free and Open-Source.</span>
@@ -107,6 +109,7 @@ import { Velustro } from 'uvcanvas';
       }
 
       & .gradient {
+        position: relative;
         background: linear-gradient(
           135deg,
           var(--color-foreground),
@@ -115,6 +118,14 @@ import { Velustro } from 'uvcanvas';
         );
         background-clip: text;
         -webkit-text-fill-color: transparent;
+
+        & img {
+          position: absolute;
+          bottom: -8px;
+          left: 0;
+          width: 100%;
+          opacity: 0.6;
+        }
       }
 
       & .reverse-gradient {
