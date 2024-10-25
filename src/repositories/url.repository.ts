@@ -1,57 +1,54 @@
-import { storage } from '@/database/redis';
-import { UrlModel } from '@/models/url.model';
-import type { Url } from '@/models/url.model';
+import { db } from '@/database/drizzle';
+import { urlsTable, type InsertUrl, type SelectUrl } from '@/database/schema';
+import { eq } from 'drizzle-orm';
 
 class UrlRepository {
-  async createUrl(urlData: UrlModel) {
-    const key = `url:${urlData.hashedSlug}`;
-    const exists = await this.getUrl(urlData.hashedSlug);
+  async createUrl(urlData: InsertUrl) {
+    const exists = await db
+      .select()
+      .from(urlsTable)
+      .where(eq(urlsTable.hashedSlug, urlData.hashedSlug));
 
-    if (exists) throw new Error('URL already exists');
+    if (exists[0]) throw new Error('URL already exists');
 
-    await storage.setItem(key, urlData.serialize(), {
-      ttl: urlData.expireAfter ?? null,
-    });
+    await db.insert(urlsTable).values(urlData);
   }
 
-  async getUrl(hashedSlug: string) {
-    const key = `url:${hashedSlug}`;
-    const data = await storage.getItem<Url>(key);
+  async getUrl(hashedSlug: SelectUrl['hashedSlug']) {
+    const data = await db
+      .select()
+      .from(urlsTable)
+      .where(eq(urlsTable.hashedSlug, hashedSlug));
 
-    if (!data) return null;
+    const url = data[0];
 
-    const urlModel = UrlModel.deserialize(data);
+    if (!url) return null;
 
-    if (
-      urlModel.expireAfter &&
-      urlModel.createdAt + urlModel.expireAfter * 1000 < Date.now()
-    ) {
-      await this.deleteUrl(urlModel.hashedSlug);
+    if (url.expiresAt && url.expiresAt.getTime() < Date.now()) {
+      await this.deleteUrl(url.hashedSlug);
 
       return null;
     }
 
-    return urlModel;
+    return url;
   }
 
-  async updateUrl(hashedSlug: string, updateData: Partial<Url>) {
-    const key = `url:${hashedSlug}`;
+  async updateUrl(
+    hashedSlug: SelectUrl['hashedSlug'],
+    updateData: Partial<Omit<SelectUrl, 'id'>>,
+  ) {
     const url = await this.getUrl(hashedSlug);
 
     if (!url) throw new Error("URL doesn't exist");
 
-    const updatedUrl = { ...url, ...updateData };
-    const updatedUrlModel = UrlModel.deserialize(updatedUrl);
-
-    await storage.setItem(key, updatedUrlModel.serialize());
-
-    return updatedUrlModel;
+    await db
+      .update(urlsTable)
+      .set(updateData)
+      .where(eq(urlsTable.hashedSlug, hashedSlug));
   }
 
   async deleteUrl(hashedSlug: string) {
-    const key = `url:${hashedSlug}`;
-
-    await storage.del(key);
+    await db.delete(urlsTable).where(eq(urlsTable.hashedSlug, hashedSlug));
   }
 }
 

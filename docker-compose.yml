@@ -15,6 +15,7 @@ services:
         TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY}
         PUBLIC_UNSHORTENER_LINK: ${PUBLIC_UNSHORTENER_LINK}
         REDIS_URL: 'redis://redis:6379'
+        DATABASE_URL: 'postgresql://postgres:postgres@postgres:5432/katanadb'
     container_name: katana-app
     restart: always
     environment:
@@ -22,10 +23,23 @@ services:
       TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY}
       PUBLIC_UNSHORTENER_LINK: ${PUBLIC_UNSHORTENER_LINK}
       REDIS_URL: 'redis://redis:6379'
+      DATABASE_URL: 'postgresql://postgres:postgres@postgres:5432/katanadb'
     env_file:
       - .env
     depends_on:
       - redis
+      - postgres
+    networks:
+      - katana-network
+
+  postgres:
+    image: postgres:latest
+    container_name: katana-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: katanadb
     networks:
       - katana-network
 

@@ -8,7 +8,6 @@ import {
   sha256,
 } from '@/lib/crypto.server';
 import { DESTRUCTION_KEY_BYTES, SLUG_LENGTH } from '@/constants/url';
-import { UrlModel } from '@/models/url.model';
 
 async function generateUniqueSlug() {
   let slug: string;
@@ -36,15 +35,14 @@ export async function createUrl(
   const destructionKey = generateSecureKey(DESTRUCTION_KEY_BYTES);
   const destructionKeyHash = await hash(destructionKey, 12);
 
-  const urlModel = UrlModel.create({
+  await urlRepository.createUrl({
     destructionKey: destructionKeyHash,
     encryptedUrl,
-    expireAfter: expireAfter || null,
+    expiresAfter: expireAfter || null,
+    expiresAt: expireAfter ? new Date(Date.now() + expireAfter * 1000) : null,
     hashedSlug,
     isPasswordProtected,
   });
-
-  await urlRepository.createUrl(urlModel);
 
   return { destructionKey: `${slug}:${destructionKey}`, slug };
 }
@@ -54,11 +52,11 @@ export async function getUrl(slug: string) {
   const url = await urlRepository.getUrl(hashedSlug);
 
   if (url) {
-    const updatedUrl = await urlRepository.updateUrl(hashedSlug, {
+    await urlRepository.updateUrl(hashedSlug, {
       clicks: url.clicks + 1,
     });
 
-    return updatedUrl;
+    return { ...url, clicks: url.clicks + 1 };
   }
 
   return null;
