@@ -4,10 +4,6 @@ export const expirations = [
     value: 0,
   },
   {
-    label: '1 Minute',
-    value: 60,
-  },
-  {
     label: '30 Minutes',
     value: 60 * 30,
   },

@@ -24,11 +24,11 @@ class UrlRepository {
 
     if (!url) return null;
 
-    // if (url.expiresAt && url.expiresAt.getTime() < Date.now()) {
-    //   await this.deleteUrl(url.hashedSlug);
+    if (url.expiresAt && url.expiresAt.getTime() < Date.now()) {
+      await this.deleteUrl(url.hashedSlug);
 
-    //   return null;
-    // }
+      return null;
+    }
 
     return url;
   }
