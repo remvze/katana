@@ -18,6 +18,8 @@ services:
     environment:
       TARGET_URL: 'http://katana:4321/api/expire'
       EXPIRATION_SECRET: ${EXPIRATION_SECRET}
+    env_file:
+      - .env
     depends_on:
       - katana
     networks:
