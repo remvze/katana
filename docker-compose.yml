@@ -30,6 +30,7 @@ services:
         PUBLIC_UNSHORTENER_LINK: ${PUBLIC_UNSHORTENER_LINK}
         REDIS_URL: 'redis://redis:6379'
         DATABASE_URL: 'postgresql://postgres:postgres@postgres:5432/katanadb'
+        EXPIRATION_SECRET: ${EXPIRATION_SECRET}
     container_name: katana-app
     restart: always
     environment:
@@ -38,6 +39,7 @@ services:
       PUBLIC_UNSHORTENER_LINK: ${PUBLIC_UNSHORTENER_LINK}
       REDIS_URL: 'redis://redis:6379'
       DATABASE_URL: 'postgresql://postgres:postgres@postgres:5432/katanadb'
+      EXPIRATION_SECRET: ${EXPIRATION_SECRET}
     env_file:
       - .env
     depends_on:

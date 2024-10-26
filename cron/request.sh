@@ -5,4 +5,4 @@ if [ -z "$TARGET_URL" ]; then
   exit 1
 fi
 
-curl -X GET "$TARGET_URL"
+curl -X GET -H "Authorization: Bearer ${EXPIRATION_SECRET}" "$TARGET_URL"
