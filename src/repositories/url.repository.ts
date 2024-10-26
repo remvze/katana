@@ -1,6 +1,6 @@
 import { db } from '@/database/drizzle';
 import { urlsTable, type InsertUrl, type SelectUrl } from '@/database/schema';
-import { eq } from 'drizzle-orm';
+import { eq, lt } from 'drizzle-orm';
 
 class UrlRepository {
   async createUrl(urlData: InsertUrl) {
@@ -24,11 +24,11 @@ class UrlRepository {
 
     if (!url) return null;
 
-    if (url.expiresAt && url.expiresAt.getTime() < Date.now()) {
-      await this.deleteUrl(url.hashedSlug);
+    // if (url.expiresAt && url.expiresAt.getTime() < Date.now()) {
+    //   await this.deleteUrl(url.hashedSlug);
 
-      return null;
-    }
+    //   return null;
+    // }
 
     return url;
   }
@@ -49,6 +49,10 @@ class UrlRepository {
 
   async deleteUrl(hashedSlug: string) {
     await db.delete(urlsTable).where(eq(urlsTable.hashedSlug, hashedSlug));
+  }
+
+  async deleteAllExpired() {
+    await db.delete(urlsTable).where(lt(urlsTable.expiresAt, new Date()));
   }
 }
 

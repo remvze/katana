@@ -7,6 +7,20 @@ services:
     networks:
       - katana-network
 
+  cron:
+    build:
+      context: ./cron
+      args:
+        TARGET_URL: 'http://katana:4321'
+    container_name: katana-cron
+    restart: always
+    environment:
+      TARGET_URL: 'http://katana:4321/api/expire'
+    depends_on:
+      - katana
+    networks:
+      - katana-network
+
   katana:
     build:
       context: .
