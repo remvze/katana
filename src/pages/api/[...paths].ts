@@ -15,8 +15,6 @@ app.get('/health', c => c.json({ success: true }, 200));
 app.get('expire', async c => {
   const authorization = c.req.header('Authorization');
 
-  console.log({ authorization });
-
   if (authorization !== `Bearer ${import.meta.env.EXPIRATION_SECRET}`) {
     return c.json({ success: false }, 403);
   }
