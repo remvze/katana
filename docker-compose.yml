@@ -12,10 +12,12 @@ services:
       context: ./cron
       args:
         TARGET_URL: 'http://katana:4321'
+        EXPIRATION_SECRET: ${EXPIRATION_SECRET}
     container_name: katana-cron
     restart: always
     environment:
       TARGET_URL: 'http://katana:4321/api/expire'
+      EXPIRATION_SECRET: ${EXPIRATION_SECRET}
     depends_on:
       - katana
     networks:
