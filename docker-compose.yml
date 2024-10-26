@@ -57,6 +57,8 @@ services:
       POSTGRES_DB: katanadb
     networks:
       - katana-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 10s
@@ -79,3 +81,6 @@ services:
 networks:
   katana-network:
     driver: bridge
+
+volumes:
+  postgres-data:
